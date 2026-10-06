@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Frame.Api/Frame.Api.csproj" />
+  <Project Path="Frame.Application/Frame.Application.csproj" />
+  <Project Path="Frame.Domain/Frame.Domain.csproj" />
+  <Project Path="Frame.Infrastructure/Frame.Infrastructure.csproj" />
+</Solution>
