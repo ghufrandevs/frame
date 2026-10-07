@@ -6,10 +6,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-// Database (and later: repositories, email, payment, auth)
+// Database, security (and later: repositories, email, payment, auth)
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
+
+// ===== Startup: migrate the database and seed studios + admin =====
+await app.Services.InitializeDatabaseAsync();
 
 // ===== HTTP pipeline =====
 if (app.Environment.IsDevelopment())
