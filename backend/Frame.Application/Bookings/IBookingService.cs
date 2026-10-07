@@ -17,4 +17,13 @@ public interface IBookingService
     /// 402 PAYMENT_DECLINED / INSUFFICIENT_FUNDS / PAYMENT_FAILED.
     /// </summary>
     Task<BookingResponse> CreateAsync(int userId, CreateBookingRequest request, CancellationToken cancellationToken);
+
+    /// <summary>All bookings of the customer, newest first.</summary>
+    Task<IReadOnlyList<BookingSummaryResponse>> GetMyBookingsAsync(int userId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// One booking with its invoice. Another customer's booking returns
+    /// 404 BOOKING_NOT_FOUND, so ids cannot be probed.
+    /// </summary>
+    Task<BookingResponse> GetMyBookingAsync(int userId, int bookingId, CancellationToken cancellationToken);
 }

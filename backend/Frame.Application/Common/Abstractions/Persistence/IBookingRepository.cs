@@ -4,7 +4,7 @@ namespace Frame.Application.Common.Abstractions.Persistence;
 
 /// <summary>
 /// Data access for bookings: availability reads, the clash check,
-/// the booking number sequence, and adding new bookings.
+/// the booking number sequence, customer reads, and adding new bookings.
 /// </summary>
 public interface IBookingRepository
 {
@@ -35,6 +35,12 @@ public interface IBookingRepository
     /// The database guarantees a unique number even under concurrent requests.
     /// </summary>
     Task<int> NextBookingSequenceAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>All bookings of one customer with their studio, newest first. Read-only.</summary>
+    Task<IReadOnlyList<Booking>> GetForUserAsync(int userId, CancellationToken cancellationToken = default);
+
+    /// <summary>One booking with its studio and customer, or null. Read-only.</summary>
+    Task<Booking?> GetByIdWithDetailsAsync(int bookingId, CancellationToken cancellationToken = default);
 
     /// <summary>Tracks a new booking. Written to the database by IUnitOfWork.</summary>
     void Add(Booking booking);

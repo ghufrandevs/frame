@@ -123,6 +123,23 @@ internal sealed class BookingService : IBookingService
         return _mapper.ToResponse(booking, studio, user.FullName);
     }
 
+    public async Task<IReadOnlyList<BookingSummaryResponse>> GetMyBookingsAsync(int userId, CancellationToken cancellationToken)
+    {
+        var bookings = await _bookings.GetForUserAsync(userId, cancellationToken);
+        return bookings.Select(_mapper.ToSummary).ToList();
+    }
+
+    public async Task<BookingResponse> GetMyBookingAsync(int userId, int bookingId, CancellationToken cancellationToken)
+    {
+        var booking = await _bookings.GetByIdWithDetailsAsync(bookingId, cancellationToken);
+
+        // Someone else's booking looks exactly like a missing one: ids cannot be probed.
+        if (booking is null || booking.UserId != userId)
+            throw AppException.NotFound(ErrorCodes.BookingNotFound);
+
+        return _mapper.ToResponse(booking, booking.Studio, booking.User.FullName);
+    }
+
     // ===== Helpers =====
 
     /// <summary>Studio, time rules and price: shared by quote and booking, so both always agree.</summary>

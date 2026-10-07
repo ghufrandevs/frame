@@ -7,11 +7,10 @@ using Frame.Domain.Enums;
 namespace Frame.Application.Bookings;
 
 /// <summary>
-/// Turns a Booking into the response the customer sees, in one place,
-/// for create, "my bookings" and booking details. Computes the display status
-/// from the current Muscat time and shows stored UTC times as Muscat time.
-/// Studio and customer name are passed in explicitly, so it never depends on
-/// navigation properties being loaded.
+/// Turns a Booking into what the customer sees, in one place: the full
+/// response (create, details) and the short card ("my bookings").
+/// Computes the display status from the current Muscat time and shows
+/// stored UTC times as Muscat time.
 /// </summary>
 internal sealed class BookingMapper
 {
@@ -24,6 +23,10 @@ internal sealed class BookingMapper
         _language = language;
     }
 
+    /// <summary>
+    /// Full booking with invoice. Studio and customer name are passed in,
+    /// so it works right after creation (navigation properties not loaded).
+    /// </summary>
     public BookingResponse ToResponse(Booking booking, Studio studio, string customerName) => new(
         booking.Id,
         booking.BookingNumber,
@@ -48,7 +51,18 @@ internal sealed class BookingMapper
             _clock.ToMuscat(booking.PaidAt)),
         Cancellation(booking));
 
-    public string DisplayStatus(Booking booking)
+    /// <summary>Short card for "my bookings". Requires booking.Studio to be loaded (Include).</summary>
+    public BookingSummaryResponse ToSummary(Booking booking) => new(
+        booking.Id,
+        booking.BookingNumber,
+        booking.Studio.LocalizedName(_language),
+        booking.BookingDate,
+        booking.StartHour,
+        booking.EndHour,
+        booking.TotalAmount,
+        DisplayStatus(booking));
+
+    private string DisplayStatus(Booking booking)
     {
         if (booking.Status == BookingStatus.Cancelled)
             return BookingDisplayStatus.Cancelled;

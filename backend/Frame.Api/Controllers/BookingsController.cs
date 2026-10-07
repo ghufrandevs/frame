@@ -10,6 +10,7 @@ namespace Frame.Api.Controllers;
 /// <summary>
 /// Customer bookings. Secure by default: every endpoint needs a customer token,
 /// except the price quote, which visitors see before they log in.
+/// The customer always comes from the token, never from the request.
 /// </summary>
 [ApiController]
 [Route("api/bookings")]
@@ -38,8 +39,7 @@ public sealed class BookingsController : ControllerBase
     }
 
     /// <summary>
-    /// Pays and books. The customer comes from the token, never from the body.
-    /// 402: card refused. 409 SLOT_TAKEN: someone else booked that time first.
+    /// Pays and books. 402: card refused. 409 SLOT_TAKEN: someone else booked that time first.
     /// </summary>
     [HttpPost]
     [ProducesResponseType<BookingResponse>(StatusCodes.Status201Created)]
@@ -53,6 +53,27 @@ public sealed class BookingsController : ControllerBase
         CancellationToken cancellationToken)
     {
         var booking = await _bookings.CreateAsync(User.GetUserId(), request, cancellationToken);
-        return Created($"/api/bookings/{booking.Id}", booking);
+        return CreatedAtAction(nameof(GetById), new { id = booking.Id }, booking);
+    }
+
+    /// <summary>The customer's bookings, newest first.</summary>
+    [HttpGet("my")]
+    [ProducesResponseType<IReadOnlyList<BookingSummaryResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<IReadOnlyList<BookingSummaryResponse>>> GetMy(CancellationToken cancellationToken)
+    {
+        var bookings = await _bookings.GetMyBookingsAsync(User.GetUserId(), cancellationToken);
+        return Ok(bookings);
+    }
+
+    /// <summary>One booking with its invoice. Another customer's booking returns 404.</summary>
+    [HttpGet("{id:int}")]
+    [ProducesResponseType<BookingResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<BookingResponse>> GetById(int id, CancellationToken cancellationToken)
+    {
+        var booking = await _bookings.GetMyBookingAsync(User.GetUserId(), id, cancellationToken);
+        return Ok(booking);
     }
 }

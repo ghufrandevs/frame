@@ -54,5 +54,21 @@ internal sealed class BookingRepository : IBookingRepository
         return values.Single();
     }
 
+    public async Task<IReadOnlyList<Booking>> GetForUserAsync(int userId, CancellationToken cancellationToken = default)
+        => await _db.Bookings
+            .AsNoTracking()
+            .Include(b => b.Studio)
+            .Where(b => b.UserId == userId)
+            .OrderByDescending(b => b.BookingDate)
+            .ThenByDescending(b => b.StartHour)
+            .ToListAsync(cancellationToken);
+
+    public Task<Booking?> GetByIdWithDetailsAsync(int bookingId, CancellationToken cancellationToken = default)
+        => _db.Bookings
+            .AsNoTracking()
+            .Include(b => b.Studio)
+            .Include(b => b.User)
+            .FirstOrDefaultAsync(b => b.Id == bookingId, cancellationToken);
+
     public void Add(Booking booking) => _db.Bookings.Add(booking);
 }
