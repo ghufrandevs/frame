@@ -36,8 +36,6 @@ public sealed class Booking : BaseEntity
     // ===== Price snapshot (copied at payment time) =====
     public decimal HourlyRate { get; private set; }
     public decimal Subtotal { get; private set; }
-    public int MorningHours { get; private set; }
-    public decimal DiscountAmount { get; private set; }
     public decimal VatAmount { get; private set; }
     public decimal TotalAmount { get; private set; }
 
@@ -99,9 +97,6 @@ public sealed class Booking : BaseEntity
         if (price.HourlyRate != studio.PricePerHour || price.Subtotal != price.HourlyRate * hours)
             throw new DomainException("PRICE_TOTAL_MISMATCH");
 
-        if (price.MorningHours > hours)
-            throw new DomainException("PRICE_INVALID");
-
         return new Booking
         {
             BookingNumber = $"FR-{sequenceNumber}",
@@ -114,8 +109,6 @@ public sealed class Booking : BaseEntity
 
             HourlyRate = price.HourlyRate,
             Subtotal = price.Subtotal,
-            MorningHours = price.MorningHours,
-            DiscountAmount = price.DiscountAmount,
             VatAmount = price.VatAmount,
             TotalAmount = price.TotalAmount,
 

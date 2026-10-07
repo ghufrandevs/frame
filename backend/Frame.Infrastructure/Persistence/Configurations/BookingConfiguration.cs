@@ -1,4 +1,4 @@
-﻿using Frame.Domain.Entities;
+using Frame.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -18,7 +18,7 @@ internal sealed class BookingConfiguration : IEntityTypeConfiguration<Booking>
             table.HasCheckConstraint("CK_Bookings_Hours_Valid",
                 $"[EndHour] > [StartHour] AND [EndHour] - [StartHour] <= {Booking.MaxHours}");
             table.HasCheckConstraint("CK_Bookings_Amounts_Valid",
-                "[Subtotal] > 0 AND [DiscountAmount] >= 0 AND [VatAmount] >= 0 AND [TotalAmount] >= 0");
+                "[Subtotal] > 0 AND [VatAmount] >= 0 AND [TotalAmount] = [Subtotal] + [VatAmount]");
         });
 
         builder.HasKey(b => b.Id);
@@ -52,8 +52,6 @@ internal sealed class BookingConfiguration : IEntityTypeConfiguration<Booking>
         // ===== Price snapshot (precision 10,3 from the decimal convention) =====
         builder.Property(b => b.HourlyRate).IsRequired();
         builder.Property(b => b.Subtotal).IsRequired();
-        builder.Property(b => b.MorningHours).IsRequired();
-        builder.Property(b => b.DiscountAmount).IsRequired();
         builder.Property(b => b.VatAmount).IsRequired();
         builder.Property(b => b.TotalAmount).IsRequired();
 
