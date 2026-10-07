@@ -1,4 +1,4 @@
-﻿using Frame.Application.Common.Errors;
+using Frame.Application.Common.Errors;
 using Frame.Application.Studios.Dtos;
 using Frame.Domain.Entities;
 
@@ -7,7 +7,7 @@ namespace Frame.Application.Studios;
 /// <summary>
 /// The scheduling rules in one place, as pure functions (no database, no clock):
 /// which days can be booked, and which hours of a day are free.
-/// Calendar, hours list and (later) booking all use these same rules,
+/// Calendar, hours list and booking all use these same rules,
 /// so the page can never show as free an hour the server would refuse.
 /// </summary>
 internal static class StudioSchedule
@@ -28,6 +28,28 @@ internal static class StudioSchedule
 
         if (date > LastBookableDay(nowMuscat))
             throw new AppException(ErrorType.Validation, "TOO_FAR_AHEAD");
+    }
+
+    /// <summary>
+    /// All time rules for one booking, used by quote and create:
+    /// date inside the window, hours inside opening time, and a start hour
+    /// that has not begun yet. Same codes Booking.Create uses.
+    /// </summary>
+    public static void EnsureCanBook(
+        Studio studio,
+        DateOnly date,
+        int startHour,
+        int endHour,
+        DateTime nowMuscat)
+    {
+        EnsureBookable(date, nowMuscat);
+
+        if (!studio.IsWithinOpeningHours(startHour, endHour))
+            throw new AppException(ErrorType.Validation, "INVALID_TIME_RANGE");
+
+        var startsAt = date.ToDateTime(new TimeOnly(startHour, 0));
+        if (startsAt <= nowMuscat)
+            throw new AppException(ErrorType.Validation, "PAST_TIME");
     }
 
     /// <summary>

@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Frame.Application.Common.Abstractions;
 using Frame.Application.Common.Abstractions.Persistence;
 using Frame.Application.Common.Errors;
@@ -41,14 +41,14 @@ internal sealed class StudioService : IStudioService
 
     public async Task<StudioResponse> GetStudioAsync(int studioId, CancellationToken cancellationToken = default)
     {
-        var studio = await GetActiveStudioAsync(studioId, cancellationToken);
+        var studio = await _studios.GetActiveOrThrowAsync(studioId, cancellationToken);
         return ToResponse(studio);
     }
 
     public async Task<StudioDaysResponse> GetDaysAsync(int studioId, string month, CancellationToken cancellationToken = default)
     {
         var firstOfMonth = ParseMonth(month);
-        var studio = await GetActiveStudioAsync(studioId, cancellationToken);
+        var studio = await _studios.GetActiveOrThrowAsync(studioId, cancellationToken);
 
         var now = _clock.MuscatNow;
         var minDate = StudioSchedule.FirstBookableDay(now);
@@ -89,7 +89,7 @@ internal sealed class StudioService : IStudioService
         var now = _clock.MuscatNow;
         StudioSchedule.EnsureBookable(date, now);
 
-        var studio = await GetActiveStudioAsync(studioId, cancellationToken);
+        var studio = await _studios.GetActiveOrThrowAsync(studioId, cancellationToken);
         var bookingsOfDay = await _bookings.GetConfirmedForStudioAsync(studio.Id, date, date, cancellationToken);
 
         return new AvailabilityResponse(
@@ -99,17 +99,6 @@ internal sealed class StudioService : IStudioService
     }
 
     // ===== Helpers =====
-
-    /// <summary>A paused or missing studio looks the same to customers: not found.</summary>
-    private async Task<Studio> GetActiveStudioAsync(int studioId, CancellationToken cancellationToken)
-    {
-        var studio = await _studios.GetByIdAsync(studioId, cancellationToken);
-
-        if (studio is null || !studio.IsActive)
-            throw AppException.NotFound(ErrorCodes.StudioNotFound);
-
-        return studio;
-    }
 
     /// <summary>"2026-10" → 2026-10-01. Anything else is a validation error on "month".</summary>
     private static DateOnly ParseMonth(string? month)
