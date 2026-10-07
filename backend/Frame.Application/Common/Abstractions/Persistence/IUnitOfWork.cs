@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 
 namespace Frame.Application.Common.Abstractions.Persistence;
 
@@ -14,9 +14,12 @@ public interface IUnitOfWork
 
     /// <summary>
     /// Runs several reads and writes inside one explicit transaction.
-    /// Used by booking: the clash check, the payment and the insert must happen
-    /// together (Serializable), so two people can never book the same hour.
-    /// If anything throws, everything is rolled back.
+    /// Used by booking: the clash check and the insert must happen together
+    /// (Serializable), so two people can never book the same hour. Payment runs
+    /// before it, so the database is never locked while waiting for the provider.
+    /// If anything throws, everything is rolled back. If the database cancels the
+    /// transaction because a concurrent one touched the same data, this throws
+    /// TransactionConflictException.
     /// </summary>
     Task<T> ExecuteInTransactionAsync<T>(
         Func<CancellationToken, Task<T>> operation,

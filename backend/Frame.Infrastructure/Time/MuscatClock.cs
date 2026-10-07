@@ -1,4 +1,4 @@
-﻿using Frame.Application.Common.Abstractions;
+using Frame.Application.Common.Abstractions;
 
 namespace Frame.Infrastructure.Time;
 
@@ -16,4 +16,9 @@ internal sealed class MuscatClock : IClock
     public DateTime MuscatNow => DateTime.SpecifyKind(UtcNow + MuscatOffset, DateTimeKind.Unspecified);
 
     public DateOnly MuscatToday => DateOnly.FromDateTime(MuscatNow);
+
+    // EF Core reads DateTime back as Unspecified; marking it Utc keeps the result
+    // the same on any machine, whatever the server's own time zone is.
+    public DateTimeOffset ToMuscat(DateTime utc)
+        => new DateTimeOffset(DateTime.SpecifyKind(utc, DateTimeKind.Utc)).ToOffset(MuscatOffset);
 }

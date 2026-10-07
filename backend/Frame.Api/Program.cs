@@ -38,8 +38,8 @@ try
     await app.Services.InitializeDatabaseAsync();
 
     // ===== HTTP pipeline (order matters) =====
-    app.UseMiddleware<ExceptionMiddleware>();   // 1. catches everything below
-    app.UseSerilogRequestLogging();             // 2. one log line per request
+    app.UseSerilogRequestLogging();             // 1. outermost: logs the FINAL status (409, not a fake 500)
+    app.UseMiddleware<ExceptionMiddleware>();   // 2. turns every exception below into a JSON response
 
     if (app.Environment.IsDevelopment())
     {

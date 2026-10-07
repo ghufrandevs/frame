@@ -1,6 +1,9 @@
-﻿using System.Data;
+using System.Data;
 using Frame.Application.Common.Abstractions.Persistence;
+using Frame.Application.Common.Errors;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Frame.Infrastructure.Persistence;
 
@@ -11,6 +14,9 @@ namespace Frame.Infrastructure.Persistence;
 /// </summary>
 internal sealed class UnitOfWork : IUnitOfWork
 {
+    // SQL Server: "Transaction was deadlocked ... and has been chosen as the deadlock victim."
+    private const int DeadlockVictim = 1205;
+
     private readonly FrameDbContext _db;
 
     public UnitOfWork(FrameDbContext db)
@@ -37,12 +43,45 @@ internal sealed class UnitOfWork : IUnitOfWork
 
             return result;
         }
-        catch
+        catch (Exception ex)
         {
             // Undo everything in SQL Server, and forget the half-done changes in memory.
-            await transaction.RollbackAsync(CancellationToken.None);
+            await RollbackQuietlyAsync(transaction);
             _db.ChangeTracker.Clear();
+
+            // Lost a race with a concurrent transaction: tell the caller in Application terms.
+            if (IsDeadlock(ex))
+                throw new TransactionConflictException(ex);
+
             throw;
         }
+    }
+
+    /// <summary>
+    /// A deadlock victim is already rolled back by SQL Server, so rolling back again
+    /// throws InvalidOperationException. Ignore only that, to keep the original error.
+    /// </summary>
+    private static async Task RollbackQuietlyAsync(IDbContextTransaction transaction)
+    {
+        try
+        {
+            await transaction.RollbackAsync(CancellationToken.None);
+        }
+        catch (InvalidOperationException)
+        {
+            // Already rolled back by the server.
+        }
+    }
+
+    /// <summary>EF Core may wrap the SqlException (e.g. in DbUpdateException), so check the whole chain.</summary>
+    private static bool IsDeadlock(Exception exception)
+    {
+        for (var current = exception; current is not null; current = current.InnerException)
+        {
+            if (current is SqlException { Number: DeadlockVictim })
+                return true;
+        }
+
+        return false;
     }
 }

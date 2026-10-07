@@ -1,3 +1,4 @@
+using Frame.Api.Extensions;
 using Frame.Api.Security;
 using Frame.Application.Bookings;
 using Frame.Application.Bookings.Dtos;
@@ -34,5 +35,24 @@ public sealed class BookingsController : ControllerBase
     {
         var quote = await _bookings.QuoteAsync(request, cancellationToken);
         return Ok(quote);
+    }
+
+    /// <summary>
+    /// Pays and books. The customer comes from the token, never from the body.
+    /// 402: card refused. 409 SLOT_TAKEN: someone else booked that time first.
+    /// </summary>
+    [HttpPost]
+    [ProducesResponseType<BookingResponse>(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status402PaymentRequired)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<ActionResult<BookingResponse>> Create(
+        [FromBody] CreateBookingRequest request,
+        CancellationToken cancellationToken)
+    {
+        var booking = await _bookings.CreateAsync(User.GetUserId(), request, cancellationToken);
+        return Created($"/api/bookings/{booking.Id}", booking);
     }
 }

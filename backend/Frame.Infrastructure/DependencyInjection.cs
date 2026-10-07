@@ -1,5 +1,7 @@
 using Frame.Application.Common.Abstractions;
+using Frame.Application.Common.Abstractions.Payments;
 using Frame.Application.Common.Abstractions.Persistence;
+using Frame.Infrastructure.Payments;
 using Frame.Infrastructure.Persistence;
 using Frame.Infrastructure.Persistence.Repositories;
 using Frame.Infrastructure.Persistence.Seed;
@@ -13,8 +15,8 @@ namespace Frame.Infrastructure;
 
 /// <summary>
 /// The single entry point the API calls to register everything
-/// this layer provides: database, repositories, time, security
-/// (and later: email, payment).
+/// this layer provides: database, repositories, time, security, payment
+/// (and later: email).
 /// Program.cs stays one line: builder.Services.AddInfrastructure(...)
 /// </summary>
 public static class DependencyInjection
@@ -39,6 +41,7 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IStudioRepository, StudioRepository>();
         services.AddScoped<IBookingRepository, BookingRepository>();
+        services.AddScoped<IEmailMessageRepository, EmailMessageRepository>();
 
         // ===== Time =====
         services.AddSingleton<IClock, MuscatClock>();
@@ -47,6 +50,10 @@ public static class DependencyInjection
         services.AddSingleton(JwtOptions.FromConfiguration(configuration));
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddSingleton<IPasswordHasher, IdentityPasswordHasher>();
+
+        // ===== Payments =====
+        // Test provider. A real one replaces this single line.
+        services.AddSingleton<IPaymentGateway, FakePaymentGateway>();
 
         return services;
     }

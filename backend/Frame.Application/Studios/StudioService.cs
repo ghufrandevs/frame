@@ -117,8 +117,8 @@ internal sealed class StudioService : IStudioService
 
     private StudioResponse ToResponse(Studio studio) => new(
         studio.Id,
-        _language.IsArabic ? studio.NameAr : studio.NameEn,
-        _language.IsArabic ? studio.DescriptionAr : studio.DescriptionEn,
+        studio.LocalizedName(_language),
+        studio.LocalizedDescription(_language),
         studio.ImageUrl,
         studio.PricePerHour,
         studio.OpenHour,
