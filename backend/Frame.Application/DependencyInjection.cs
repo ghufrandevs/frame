@@ -1,5 +1,6 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Frame.Application.Auth;
+using Frame.Application.Studios;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Frame.Application;
@@ -18,6 +19,7 @@ public static class DependencyInjection
 
         // ===== Feature services =====
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IStudioService, StudioService>();
 
         return services;
     }

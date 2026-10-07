@@ -37,6 +37,8 @@ public static class DependencyInjection
 
         // ===== Repositories =====
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IStudioRepository, StudioRepository>();
+        services.AddScoped<IBookingRepository, BookingRepository>();
 
         // ===== Time =====
         services.AddSingleton<IClock, MuscatClock>();

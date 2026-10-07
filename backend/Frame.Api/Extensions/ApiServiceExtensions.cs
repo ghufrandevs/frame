@@ -1,9 +1,11 @@
-﻿using System.Text;
+using System.Text;
 using System.Text.Json;
 using System.Threading.RateLimiting;
 using Frame.Api.Filters;
 using Frame.Api.Middleware;
 using Frame.Api.Security;
+using Frame.Api.Services;
+using Frame.Application.Common.Abstractions;
 using Frame.Application.Common.Errors;
 using Frame.Domain.Enums;
 using Frame.Infrastructure.Security;
@@ -16,8 +18,8 @@ namespace Frame.Api.Extensions;
 
 /// <summary>
 /// Everything the HTTP layer needs, split into small focused methods:
-/// controllers + validation, JWT authentication + policies, CORS,
-/// login rate limiting and Swagger. Program.cs calls AddFrameApi once.
+/// controllers + validation, request language, JWT authentication + policies,
+/// CORS, login rate limiting and Swagger. Program.cs calls AddFrameApi once.
 /// </summary>
 internal static class ApiServiceExtensions
 {
@@ -33,6 +35,10 @@ internal static class ApiServiceExtensions
         services
             .AddControllers(options => options.Filters.Add<ValidationFilter>())
             .ConfigureApiBehaviorOptions(options => options.InvalidModelStateResponseFactory = BuildInvalidRequestResponse);
+
+        // Request language (Accept-Language → "ar" / "en") for the Application layer.
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentLanguage, HttpCurrentLanguage>();
 
         services.AddFrameAuthentication(configuration);
         services.AddFrameCors(configuration);
