@@ -1,6 +1,7 @@
 using FluentValidation;
 using Frame.Application.Auth;
 using Frame.Application.Bookings;
+using Frame.Application.Emails;
 using Frame.Application.Studios;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,6 +19,10 @@ public static class DependencyInjection
 
         services.AddSingleton<IPriceCalculator, PriceCalculator>();
         services.AddScoped<BookingMapper>();
+
+        // ===== Emails (outbox) =====
+        services.AddSingleton<BookingEmailComposer>();
+        services.AddScoped<IEmailOutboxProcessor, EmailOutboxProcessor>();
 
         return services;
     }

@@ -1,6 +1,8 @@
 using Frame.Application.Common.Abstractions;
+using Frame.Application.Common.Abstractions.Email;
 using Frame.Application.Common.Abstractions.Payments;
 using Frame.Application.Common.Abstractions.Persistence;
+using Frame.Infrastructure.Email;
 using Frame.Infrastructure.Payments;
 using Frame.Infrastructure.Persistence;
 using Frame.Infrastructure.Persistence.Repositories;
@@ -14,9 +16,8 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Frame.Infrastructure;
 
 /// <summary>
-/// The single entry point the API calls to register everything
-/// this layer provides: database, repositories, time, security, payment
-/// (and later: email).
+/// The single entry point the API calls to register everything this layer
+/// provides: database, repositories, time, security, payment and email.
 /// Program.cs stays one line: builder.Services.AddInfrastructure(...)
 /// </summary>
 public static class DependencyInjection
@@ -54,6 +55,11 @@ public static class DependencyInjection
         // ===== Payments =====
         // Test provider. A real one replaces this single line.
         services.AddSingleton<IPaymentGateway, FakePaymentGateway>();
+
+        // ===== Email: SMTP sender + background outbox worker =====
+        services.AddSingleton(SmtpOptions.FromConfiguration(configuration));
+        services.AddSingleton<IEmailSender, SmtpEmailSender>();
+        services.AddHostedService<EmailOutboxWorker>();
 
         return services;
     }

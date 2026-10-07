@@ -10,4 +10,10 @@ public interface IEmailMessageRepository
 {
     /// <summary>Tracks a new pending email. Written to the database by IUnitOfWork.</summary>
     void Add(EmailMessage message);
+
+    /// <summary>
+    /// Oldest pending emails with their booking, studio and customer, up to batchSize.
+    /// Tracked, because the sender marks each one Sent or Failed.
+    /// </summary>
+    Task<IReadOnlyList<EmailMessage>> GetPendingAsync(int batchSize, CancellationToken cancellationToken = default);
 }
