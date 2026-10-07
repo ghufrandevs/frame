@@ -1,7 +1,10 @@
 using Frame.Application.Common.Abstractions;
+using Frame.Application.Common.Abstractions.Persistence;
 using Frame.Infrastructure.Persistence;
+using Frame.Infrastructure.Persistence.Repositories;
 using Frame.Infrastructure.Persistence.Seed;
 using Frame.Infrastructure.Security;
+using Frame.Infrastructure.Time;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,8 +13,8 @@ namespace Frame.Infrastructure;
 
 /// <summary>
 /// The single entry point the API calls to register everything
-/// this layer provides (database, security; repositories, email,
-/// payment and auth services as we build them).
+/// this layer provides: database, repositories, time, security
+/// (and later: email, payment).
 /// Program.cs stays one line: builder.Services.AddInfrastructure(...)
 /// </summary>
 public static class DependencyInjection
@@ -29,9 +32,18 @@ public static class DependencyInjection
         services.AddDbContext<FrameDbContext>(options =>
             options.UseSqlServer(connectionString));
 
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<DatabaseSeeder>();
 
+        // ===== Repositories =====
+        services.AddScoped<IUserRepository, UserRepository>();
+
+        // ===== Time =====
+        services.AddSingleton<IClock, MuscatClock>();
+
         // ===== Security =====
+        services.AddSingleton(JwtOptions.FromConfiguration(configuration));
+        services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddSingleton<IPasswordHasher, IdentityPasswordHasher>();
 
         return services;

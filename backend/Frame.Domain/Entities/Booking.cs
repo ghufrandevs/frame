@@ -1,4 +1,4 @@
-﻿using Frame.Domain.Common;
+using Frame.Domain.Common;
 using Frame.Domain.Enums;
 using Frame.Domain.ValueObjects;
 
@@ -9,6 +9,7 @@ namespace Frame.Domain.Entities;
 /// Payment and booking happen together, so a Booking always starts Confirmed
 /// and carries a frozen copy of the price (the invoice never changes later).
 /// All times are Muscat local time.
+/// Error codes here are part of the API contract: never rename them.
 /// </summary>
 public sealed class Booking : BaseEntity
 {
@@ -85,11 +86,8 @@ public sealed class Booking : BaseEntity
             throw new DomainException("STUDIO_INACTIVE");
 
         var hours = endHour - startHour;
-        if (hours < MinHours || hours > MaxHours)
-            throw new DomainException("BOOKING_DURATION_INVALID");
-
-        if (!studio.IsWithinOpeningHours(startHour, endHour))
-            throw new DomainException("OUTSIDE_OPENING_HOURS");
+        if (hours < MinHours || hours > MaxHours || !studio.IsWithinOpeningHours(startHour, endHour))
+            throw new DomainException("INVALID_TIME_RANGE");
 
         var startsAt = date.ToDateTime(new TimeOnly(startHour, 0));
         if (startsAt <= nowMuscat)
@@ -145,10 +143,10 @@ public sealed class Booking : BaseEntity
     public void Cancel(DateTime nowMuscat, DateTime nowUtc)
     {
         if (Status == BookingStatus.Cancelled)
-            throw new DomainException("BOOKING_ALREADY_CANCELLED");
+            throw new DomainException("ALREADY_CANCELLED");
 
         if (nowMuscat >= StartsAt)
-            throw new DomainException("BOOKING_ALREADY_STARTED");
+            throw new DomainException("BOOKING_STARTED");
 
         Status = BookingStatus.Cancelled;
         CancelledAt = nowUtc;
