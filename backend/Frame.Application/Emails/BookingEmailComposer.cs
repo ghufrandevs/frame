@@ -45,12 +45,17 @@ internal sealed class BookingEmailComposer
             (t.InvoiceNumber, booking.InvoiceNumber),
             (t.IssuedAt, FormatTime(booking.CreatedAt)),
             (t.Hours, booking.Hours.ToString(CultureInfo.InvariantCulture)),
-            (t.HourlyRate, Money(booking.HourlyRate, t)),
-            (t.Subtotal, Money(booking.Subtotal, t)),
-            (t.Vat, Money(booking.VatAmount, t)),
-            (t.Total, Money(booking.TotalAmount, t)),
-            (t.Payment, $"{booking.CardBrand} •••• {booking.CardLast4} · {booking.PaymentReference}")
+            (t.HourlyRate, Money(booking.HourlyRate, t))
         };
+
+        // Only shown when the customer chose a photographer.
+        if (booking.PhotographerFee > 0)
+            rows.Add((t.Photographer, Money(booking.PhotographerFee, t)));
+
+        rows.Add((t.Subtotal, Money(booking.Subtotal, t)));
+        rows.Add((t.Vat, Money(booking.VatAmount, t)));
+        rows.Add((t.Total, Money(booking.TotalAmount, t)));
+        rows.Add((t.Payment, $"{booking.CardBrand} •••• {booking.CardLast4} · {booking.PaymentReference}"));
 
         if (isCancelled)
         {
@@ -113,7 +118,7 @@ internal sealed class BookingEmailComposer
         string Greeting, string ConfirmedIntro, string CancelledIntro,
         string BookingNumber, string Studio, string Date, string Time,
         string InvoiceNumber, string IssuedAt, string Hours, string HourlyRate,
-        string Subtotal, string Vat, string Total, string Payment,
+        string Photographer, string Subtotal, string Vat, string Total, string Payment,
         string Refund, string CancelledAt, string Currency, string Footer)
     {
         public static readonly Texts Arabic = new(
@@ -130,6 +135,7 @@ internal sealed class BookingEmailComposer
             IssuedAt: "تاريخ الإصدار",
             Hours: "عدد الساعات",
             HourlyRate: "سعر الساعة",
+            Photographer: "مصوّر",
             Subtotal: "المجموع",
             Vat: "ضريبة القيمة المضافة 5٪",
             Total: "الإجمالي",
@@ -153,6 +159,7 @@ internal sealed class BookingEmailComposer
             IssuedAt: "Issued at",
             Hours: "Hours",
             HourlyRate: "Hourly rate",
+            Photographer: "Photographer",
             Subtotal: "Subtotal",
             Vat: "VAT 5%",
             Total: "Total",

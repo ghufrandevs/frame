@@ -7,5 +7,8 @@ public interface IPriceCalculator
     /// <summary>VAT rate applied on the subtotal (0.05 = 5%).</summary>
     decimal VatRate { get; }
 
-    BookingPrice Calculate(decimal hourlyRate, int hours);
+    /// <summary>Price of the optional photographer per booked hour, same for every studio.</summary>
+    decimal PhotographerRatePerHour { get; }
+
+    BookingPrice Calculate(decimal hourlyRate, int hours, bool withPhotographer);
 }

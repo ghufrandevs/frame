@@ -41,6 +41,7 @@ internal sealed class BookingMapper
             customerName,
             booking.Hours,
             booking.HourlyRate,
+            booking.PhotographerFee,
             booking.Subtotal,
             booking.VatAmount,
             booking.TotalAmount),

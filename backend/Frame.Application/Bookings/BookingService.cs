@@ -72,6 +72,8 @@ internal sealed class BookingService : IBookingService
             selection.EndHour,
             selection.Hours,
             price.HourlyRate,
+            _priceCalculator.PhotographerRatePerHour,
+            price.PhotographerFee,
             price.Subtotal,
             _priceCalculator.VatRate,
             price.VatAmount,
@@ -117,8 +119,8 @@ internal sealed class BookingService : IBookingService
             throw;
         }
 
-        _logger.LogInformation("Booking {BookingNumber} created for user {UserId}: studio {StudioId}, {Date} {StartHour}-{EndHour}, {Total} OMR",
-            booking.BookingNumber, user.Id, studio.Id, selection.Date, selection.StartHour, selection.EndHour, price.TotalAmount);
+        _logger.LogInformation("Booking {BookingNumber} created for user {UserId}: studio {StudioId}, {Date} {StartHour}-{EndHour}, photographer {WithPhotographer}, {Total} OMR",
+            booking.BookingNumber, user.Id, studio.Id, selection.Date, selection.StartHour, selection.EndHour, selection.WithPhotographer, price.TotalAmount);
 
         return _mapper.ToResponse(booking, studio, user.FullName);
     }
@@ -148,7 +150,7 @@ internal sealed class BookingService : IBookingService
         var studio = await _studios.GetActiveOrThrowAsync(selection.StudioId, cancellationToken);
         StudioSchedule.EnsureCanBook(studio, selection.Date, selection.StartHour, selection.EndHour, _clock.MuscatNow);
 
-        var price = _priceCalculator.Calculate(studio.PricePerHour, selection.Hours);
+        var price = _priceCalculator.Calculate(studio.PricePerHour, selection.Hours, selection.WithPhotographer);
         return (studio, price);
     }
 
@@ -211,8 +213,8 @@ internal sealed class BookingService : IBookingService
     private static AppException SlotTaken()
         => new(ErrorType.Conflict, ErrorCodes.SlotTaken);
 
-    /// <summary>The selected time, read once from the request (the validator guaranteed every field).</summary>
-    private readonly record struct Selection(int StudioId, DateOnly Date, int StartHour, int EndHour)
+    /// <summary>The selected time and add-ons, read once from the request (the validator guaranteed every field).</summary>
+    private readonly record struct Selection(int StudioId, DateOnly Date, int StartHour, int EndHour, bool WithPhotographer)
     {
         public int Hours => EndHour - StartHour;
 
@@ -220,6 +222,7 @@ internal sealed class BookingService : IBookingService
             request.StudioId!.Value,
             request.Date!.Value,
             request.StartHour!.Value,
-            request.EndHour!.Value);
+            request.EndHour!.Value,
+            request.WithPhotographer);
     }
 }

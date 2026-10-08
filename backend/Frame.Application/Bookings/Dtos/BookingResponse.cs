@@ -26,12 +26,14 @@ public sealed record BookingResponse(
 
 public sealed record BookingStudioDto(int Id, string Name, string ImageUrl);
 
+/// <summary>Subtotal = hours x hourlyRate + photographerFee (0 when no photographer).</summary>
 public sealed record InvoiceDto(
     string InvoiceNumber,
     DateTimeOffset IssuedAt,
     string CustomerName,
     int Hours,
     decimal HourlyRate,
+    decimal PhotographerFee,
     decimal Subtotal,
     decimal VatAmount,
     decimal Total);

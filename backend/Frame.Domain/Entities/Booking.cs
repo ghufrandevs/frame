@@ -35,6 +35,10 @@ public sealed class Booking : BaseEntity
 
     // ===== Price snapshot (copied at payment time) =====
     public decimal HourlyRate { get; private set; }
+
+    /// <summary>Optional photographer for the whole booking; 0 when not chosen. Part of Subtotal.</summary>
+    public decimal PhotographerFee { get; private set; }
+
     public decimal Subtotal { get; private set; }
     public decimal VatAmount { get; private set; }
     public decimal TotalAmount { get; private set; }
@@ -94,7 +98,9 @@ public sealed class Booking : BaseEntity
         if (date > DateOnly.FromDateTime(nowMuscat).AddMonths(MaxMonthsAhead))
             throw new DomainException("TOO_FAR_AHEAD");
 
-        if (price.HourlyRate != studio.PricePerHour || price.Subtotal != price.HourlyRate * hours)
+        // Subtotal = studio hours + optional photographer, never anything else.
+        if (price.HourlyRate != studio.PricePerHour
+            || price.Subtotal != price.HourlyRate * hours + price.PhotographerFee)
             throw new DomainException("PRICE_TOTAL_MISMATCH");
 
         return new Booking
@@ -108,6 +114,7 @@ public sealed class Booking : BaseEntity
             EndHour = endHour,
 
             HourlyRate = price.HourlyRate,
+            PhotographerFee = price.PhotographerFee,
             Subtotal = price.Subtotal,
             VatAmount = price.VatAmount,
             TotalAmount = price.TotalAmount,
