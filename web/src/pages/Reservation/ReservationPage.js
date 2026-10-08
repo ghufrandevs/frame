@@ -62,13 +62,13 @@ export const ReservationPage = {
     const fades = root.querySelectorAll('.fade');
     fades.forEach((e) => e.classList.add('x'));
     const update = () => {
-      root.querySelector('#stt').textContent = t(`studios.${id}.name`);
-      root.querySelector('#std').textContent = t(`studios.${id}.description`);
+      root.querySelector('#stt').textContent = studio.name;
+      root.querySelector('#std').textContent = studio.description;
       root.querySelector('#rt').innerHTML = `${money(studio.ratePerHour)} ${t('common.perHour')}`;
       parts.rotation.renderThumbs(id);
       fades.forEach((e) => e.classList.remove('x'));
       parts.refresh();
-      document.title = `FRAME — ${t(`studios.${id}.name`)}`;
+      document.title = `FRAME — ${studio.name}`;
     };
     animate ? setTimeout(update, 380) : update();
   },

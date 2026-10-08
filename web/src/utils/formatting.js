@@ -11,3 +11,6 @@ export function formatExpiry(raw, deleting = false) {
   return v.length === 2 && !deleting ? `${v} / ` : v;
 }
 export const formatCVV = (raw) => raw.replace(/\D/g, '').slice(0, 3);
+
+// Text from the server goes into HTML strings, so it is escaped first: a name like "<b>" shows as text.
+export const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]);
