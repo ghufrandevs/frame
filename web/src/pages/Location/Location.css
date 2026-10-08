@@ -1,0 +1,50 @@
+.map {
+  background:linear-gradient(90deg,#dfe6d7 1px,transparent 1px) 0 0/44px 44px,linear-gradient(#dfe6d7 1px,transparent 1px) 0 0/44px 44px,#eef3e8;
+  border-radius:20px;
+  border:1px solid var(--b);
+  min-height:380px;
+  flex:1;
+  position:relative;
+  overflow:hidden;
+}
+.map:before {
+  content:"";
+  position:absolute;
+  left:-10%;
+  top:58%;
+  width:130%;
+  height:30px;
+  background:#cfe1e8;
+  transform:rotate(-16deg);
+}
+.map:after {
+  content:"";
+  position:absolute;
+  left:30%;
+  top:-10%;
+  width:18px;
+  height:130%;
+  background:#fff;
+  transform:rotate(12deg);
+  box-shadow:0 0 0 1px var(--b);
+}
+.pin {
+  position:absolute;
+  left:50%;
+  top:45%;
+  width:26px;
+  height:26px;
+  background:var(--g);
+  border-radius:50% 50% 50% 0;
+  transform:rotate(-45deg);
+  z-index:2;
+  animation:bn 1.8s ease-in-out infinite;
+}
+.pin:after {
+  content:"";
+  position:absolute;
+  inset:8px;
+  background:#fff;
+  border-radius:50%;
+}
+@keyframes bn{50%{transform:rotate(-45deg) translate(3px,-3px)}}

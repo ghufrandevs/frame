@@ -1,0 +1,38 @@
+/* Reset, safe-area padding, page-enter animation. */
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+* {
+  box-sizing:border-box;
+}
+html {
+  scroll-padding-top:env(safe-area-inset-top,0px);
+}
+button {
+  font:inherit;
+  color:inherit;
+  cursor:pointer;
+}
+p {
+  margin:0;
+}
+:focus-visible {
+  outline:3px solid #7aa88e;
+  outline-offset:2px;
+}
+.eb {
+  font-weight:600;
+  font-size:10px;
+  color:var(--m);
+  text-transform:uppercase;
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+main {
+  animation:pg .5s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes pg{from{opacity:0;transform:translateY(14px)}}
+#header, #footer {
+  display: contents; /* wrappers must not break the sticky header */
+}

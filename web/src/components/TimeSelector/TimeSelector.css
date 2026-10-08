@@ -1,0 +1,39 @@
+.tm {
+  display:flex;
+  gap:12px;
+}
+.fld {
+  flex:1;
+  border:1px solid var(--b);
+  border-radius:12px;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  position:relative;
+  transition:border-color .2s;
+}
+.fld:focus-within,.fld:hover {
+  border-color:var(--g);
+}
+.fld label {
+  font-size:11px;
+  color:var(--m);
+}
+.fld select {
+  appearance:none;
+  border:0;
+  background:none;
+  font:600 14px inherit;
+  color:var(--g);
+  padding:0;
+  width:100%;
+  cursor:pointer;
+  outline:0;
+}
+.fld svg {
+  position:absolute;
+  inset-inline-end:14px;
+  bottom:16px;
+  pointer-events:none;
+}

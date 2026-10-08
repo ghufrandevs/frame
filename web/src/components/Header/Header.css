@@ -1,0 +1,63 @@
+.nav {
+  height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 80px;
+  border-bottom:1px solid var(--b);
+  position:sticky;
+  top:env(safe-area-inset-top,0px);
+  background:var(--bg);
+  z-index:30;
+  gap:16px;
+}
+.brand {
+  display:flex;
+  gap:10px;
+  align-items:center;
+  font-weight:600;
+  font-size:40px;
+  color:var(--g);
+  text-decoration:none;
+  line-height:1;
+}
+.brand svg {
+  width:35px;
+  height:35px;
+}
+.mn {
+  display:flex;
+  gap:32px;
+}
+.mn a {
+  font-weight:600;
+  font-size:14px;
+  height:44px;
+  display:flex;
+  align-items:center;
+  color:var(--g);
+  cursor:pointer;
+  position:relative;
+  text-decoration:none;
+}
+.mn a:after {
+  content:"";
+  position:absolute;
+  inset-inline:0;
+  bottom:6px;
+  height:2px;
+  background:var(--g);
+  transform:scaleX(0);
+  transition:transform .3s;
+}
+.mn a:hover:after,.mn a.on:after {
+  transform:scaleX(1);
+}
+.act {
+  display:flex;
+  gap:28px;
+  align-items:center;
+}
+.mnav {
+  display:none;
+}

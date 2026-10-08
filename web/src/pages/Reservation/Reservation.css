@@ -1,0 +1,33 @@
+.split {
+  display:flex;
+  gap:15px;
+  align-items:flex-start;
+  margin-top:28px;
+}
+.panel {
+  background:#fff;
+  border:1px solid var(--b);
+  border-radius:20px;
+  padding:28px;
+  width:562px;
+  flex:none;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.ph1 {
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+}
+.ph1 h2 {
+  font-weight:500;
+  font-size:24px;
+  margin:8px 0 0;
+}
+.fn {
+  font-size:11px;
+  line-height:1.5;
+  color:var(--m);
+  text-align:center;
+}

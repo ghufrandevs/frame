@@ -1,0 +1,51 @@
+.ff {
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-bottom:12px;
+}
+.ff label {
+  font-weight:500;
+  font-size:12px;
+}
+.ff input,.in {
+  height:48px;
+  border:1px solid var(--b);
+  border-radius:12px;
+  padding:0 14px;
+  font:400 14px inherit;
+  color:var(--g);
+  background:#fff;
+  transition:border-color .2s,box-shadow .2s;
+  width:100%;
+}
+.ff input::placeholder {
+  color:var(--m);
+}
+.ff input:focus,.in:focus {
+  outline:0;
+  border-color:var(--g);
+  box-shadow:0 0 0 3px #183e3220;
+}
+.ff input.bad {
+  border-color:var(--r);
+  background:#fff7f6;
+}
+.ff input.good {
+  border-color:#2e7d4f;
+}
+.ff input:disabled {
+  background:var(--pl);
+}
+.er {
+  font-size:11px;
+  color:var(--r);
+  min-height:14px;
+}
+.rw {
+  display:flex;
+  gap:12px;
+}
+.rw .ff {
+  flex:1;
+}

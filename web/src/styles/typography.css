@@ -1,0 +1,11 @@
+/* Font families. Inter is loaded in index.html; Arabic uses Noto Sans Arabic. */
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--g);
+  font:400 14px/normal Inter,"Noto Sans Arabic",system-ui,sans-serif;
+  overflow-x:hidden;
+}
+[dir=rtl] body {
+  font-family:"Noto Sans Arabic",Inter,sans-serif;
+}
