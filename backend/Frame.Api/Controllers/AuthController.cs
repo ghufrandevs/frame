@@ -1,4 +1,4 @@
-﻿using Frame.Api.Extensions;
+using Frame.Api.Extensions;
 using Frame.Api.Security;
 using Frame.Application.Auth;
 using Frame.Application.Auth.Dtos;
@@ -45,13 +45,24 @@ public sealed class AuthController : ControllerBase
         return Ok(response);
     }
 
-    /// <summary>The logged-in customer's profile, for the top bar.</summary>
+    /// <summary>The logged-in customer's profile, for the top bar and the profile page.</summary>
     [HttpGet("me")]
     [Authorize(Policy = AuthPolicies.Customer)]
-    [ProducesResponseType<AuthUserDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProfileResponse>(StatusCodes.Status200OK)]
     public async Task<IActionResult> Me(CancellationToken cancellationToken)
     {
         var profile = await _authService.GetCurrentUserAsync(User.GetUserId(), cancellationToken);
+        return Ok(profile);
+    }
+
+    /// <summary>Changes the customer's name and phone. The email cannot be changed.</summary>
+    [HttpPut("me")]
+    [Authorize(Policy = AuthPolicies.Customer)]
+    [ProducesResponseType<ProfileResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateMe(UpdateProfileRequest request, CancellationToken cancellationToken)
+    {
+        var profile = await _authService.UpdateProfileAsync(User.GetUserId(), request, cancellationToken);
         return Ok(profile);
     }
 }

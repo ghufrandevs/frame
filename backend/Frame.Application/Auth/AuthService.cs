@@ -1,4 +1,4 @@
-﻿using Frame.Application.Auth.Dtos;
+using Frame.Application.Auth.Dtos;
 using Frame.Application.Common.Abstractions;
 using Frame.Application.Common.Abstractions.Persistence;
 using Frame.Application.Common.Errors;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 namespace Frame.Application.Auth;
 
 /// <summary>
-/// Sign-up and login. Requests reach here already validated (FluentValidation);
+/// Sign-up, login and profile. Requests reach here already validated (FluentValidation);
 /// this class applies the business rules and talks to the abstractions only,
 /// never to EF Core, JWT libraries or hashing code directly.
 /// </summary>
@@ -45,7 +45,7 @@ internal sealed class AuthService : IAuthService
             throw AppException.Conflict(ErrorCodes.EmailTaken);
 
         var user = User.CreateCustomer(
-            request.FullName,
+            request.FullName.Trim(),
             email,
             NormalizePhone(request.Phone),
             _passwordHasher.Hash(request.Password));
@@ -63,12 +63,21 @@ internal sealed class AuthService : IAuthService
     public Task<AuthResponse> LoginAdminAsync(LoginRequest request, CancellationToken cancellationToken = default)
         => LoginAsync(request, UserRole.Admin, cancellationToken);
 
-    public async Task<AuthUserDto> GetCurrentUserAsync(int userId, CancellationToken cancellationToken = default)
+    public async Task<ProfileResponse> GetCurrentUserAsync(int userId, CancellationToken cancellationToken = default)
     {
-        var user = await _users.GetByIdAsync(userId, cancellationToken)
-            ?? throw AppException.Unauthorized();
+        var user = await GetUserOrThrowAsync(userId, cancellationToken);
+        return ToProfile(user);
+    }
 
-        return ToDto(user);
+    public async Task<ProfileResponse> UpdateProfileAsync(int userId, UpdateProfileRequest request, CancellationToken cancellationToken = default)
+    {
+        var user = await GetUserOrThrowAsync(userId, cancellationToken);
+
+        user.UpdateProfile(request.FullName.Trim(), NormalizePhone(request.Phone));
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        _logger.LogInformation("Profile updated {UserId}", user.Id);
+        return ToProfile(user);
     }
 
     /// <summary>
@@ -95,6 +104,11 @@ internal sealed class AuthService : IAuthService
         return BuildResponse(user);
     }
 
+    /// <summary>A valid token for a user that no longer exists is treated as not logged in.</summary>
+    private async Task<User> GetUserOrThrowAsync(int userId, CancellationToken cancellationToken)
+        => await _users.GetByIdAsync(userId, cancellationToken)
+           ?? throw AppException.Unauthorized();
+
     private AuthResponse BuildResponse(User user)
     {
         var token = _tokenGenerator.Generate(user);
@@ -103,6 +117,9 @@ internal sealed class AuthService : IAuthService
 
     private static AuthUserDto ToDto(User user)
         => new(user.Id, user.FullName, user.Email, user.Role.ToString());
+
+    private static ProfileResponse ToProfile(User user)
+        => new(user.Id, user.FullName, user.Email, user.Phone, user.Role.ToString());
 
     /// <summary>Stores every phone the same way (8 digits), with or without +968.</summary>
     private static string NormalizePhone(string phone)

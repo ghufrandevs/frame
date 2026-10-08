@@ -1,4 +1,4 @@
-﻿using Frame.Domain.Common;
+using Frame.Domain.Common;
 using Frame.Domain.Enums;
 
 namespace Frame.Domain.Entities;
@@ -7,6 +7,7 @@ namespace Frame.Domain.Entities;
 /// A person with an account: a customer who books, or an admin who manages.
 /// Created only through the factory methods below, so a user
 /// can never exist without a name, a normalized email and a hashed password.
+/// The email is the login name and never changes.
 /// </summary>
 public sealed class User : BaseEntity
 {
@@ -41,6 +42,13 @@ public sealed class User : BaseEntity
     /// <summary>Used only by the database seed to create the admin account.</summary>
     public static User CreateAdmin(string fullName, string email, string phone, string passwordHash)
         => new(fullName, email, phone, passwordHash, UserRole.Admin);
+
+    /// <summary>Profile page: name and phone only. The email (login name) stays the same.</summary>
+    public void UpdateProfile(string fullName, string phone)
+    {
+        FullName = Guard.NotEmpty(fullName, "FULL_NAME_REQUIRED");
+        Phone = Guard.NotEmpty(phone, "PHONE_REQUIRED");
+    }
 
     /// <summary>
     /// One place that defines how emails are compared.
