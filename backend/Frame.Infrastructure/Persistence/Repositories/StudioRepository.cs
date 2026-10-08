@@ -1,4 +1,4 @@
-﻿using Frame.Application.Common.Abstractions.Persistence;
+using Frame.Application.Common.Abstractions.Persistence;
 using Frame.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +21,14 @@ internal sealed class StudioRepository : IStudioRepository
             .OrderBy(s => s.Id)
             .ToListAsync(cancellationToken);
 
+    public async Task<IReadOnlyList<Studio>> GetAllAsync(CancellationToken cancellationToken = default)
+        => await _db.Studios
+            .AsNoTracking()
+            .OrderBy(s => s.Id)
+            .ToListAsync(cancellationToken);
+
     public Task<Studio?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         => _db.Studios.FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
+
+    public void Add(Studio studio) => _db.Studios.Add(studio);
 }
