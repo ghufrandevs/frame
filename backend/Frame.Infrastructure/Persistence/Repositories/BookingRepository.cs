@@ -70,5 +70,41 @@ internal sealed class BookingRepository : IBookingRepository
             .Include(b => b.User)
             .FirstOrDefaultAsync(b => b.Id == bookingId, cancellationToken);
 
+    public async Task<(IReadOnlyList<Booking> Items, int TotalCount)> GetAdminPageAsync(
+        int? studioId,
+        DateOnly? date,
+        int page,
+        int pageSize,
+        CancellationToken cancellationToken = default)
+    {
+        var query = _db.Bookings.AsNoTracking();
+
+        if (studioId is not null)
+            query = query.Where(b => b.StudioId == studioId);
+
+        if (date is not null)
+            query = query.Where(b => b.BookingDate == date);
+
+        // Count after the filters, before paging: "page 2 of 7".
+        var totalCount = await query.CountAsync(cancellationToken);
+
+        var items = await query
+            .Include(b => b.Studio)
+            .Include(b => b.User)
+            .OrderByDescending(b => b.BookingDate)
+            .ThenByDescending(b => b.StartHour)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return (items, totalCount);
+    }
+
+    public Task<Booking?> GetByIdForUpdateAsync(int bookingId, CancellationToken cancellationToken = default)
+        => _db.Bookings
+            .Include(b => b.Studio)
+            .Include(b => b.User)
+            .FirstOrDefaultAsync(b => b.Id == bookingId, cancellationToken);
+
     public void Add(Booking booking) => _db.Bookings.Add(booking);
 }

@@ -7,8 +7,8 @@ using Frame.Domain.Enums;
 namespace Frame.Application.Bookings;
 
 /// <summary>
-/// Turns a Booking into what the customer sees, in one place: the full
-/// response (create, details) and the short card ("my bookings").
+/// Turns a Booking into what the customer or admin sees, in one place.
+/// Admin versions reuse the customer versions and only add the customer's details.
 /// Computes the display status from the current Muscat time and shows
 /// stored UTC times as Muscat time.
 /// </summary>
@@ -61,6 +61,17 @@ internal sealed class BookingMapper
         booking.EndHour,
         booking.TotalAmount,
         DisplayStatus(booking));
+
+    /// <summary>Admin details: the customer response plus contact details. Requires Studio and User loaded.</summary>
+    public BookingResponse ToAdminResponse(Booking booking)
+        => ToResponse(booking, booking.Studio, booking.User.FullName) with
+        {
+            Customer = new CustomerDto(booking.User.FullName, booking.User.Email, booking.User.Phone)
+        };
+
+    /// <summary>Admin list row: the customer card plus the customer's name. Requires Studio and User loaded.</summary>
+    public BookingSummaryResponse ToAdminSummary(Booking booking)
+        => ToSummary(booking) with { CustomerName = booking.User.FullName };
 
     private string DisplayStatus(Booking booking)
     {

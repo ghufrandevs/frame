@@ -25,4 +25,12 @@ internal sealed class EmailMessageRepository : IEmailMessageRepository
             .OrderBy(m => m.Id)
             .Take(batchSize)
             .ToListAsync(cancellationToken);
+
+    public Task<string?> GetBookingLanguageAsync(int bookingId, CancellationToken cancellationToken = default)
+        => _db.EmailMessages
+            .AsNoTracking()
+            .Where(m => m.BookingId == bookingId)
+            .OrderBy(m => m.Id)
+            .Select(m => m.Language)
+            .FirstOrDefaultAsync(cancellationToken);
 }

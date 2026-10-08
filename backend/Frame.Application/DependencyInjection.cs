@@ -1,4 +1,5 @@
 using FluentValidation;
+using Frame.Application.Admin;
 using Frame.Application.Auth;
 using Frame.Application.Bookings;
 using Frame.Application.Emails;
@@ -19,6 +20,9 @@ public static class DependencyInjection
 
         services.AddSingleton<IPriceCalculator, PriceCalculator>();
         services.AddScoped<BookingMapper>();
+
+        // ===== Admin =====
+        services.AddScoped<IAdminBookingService, AdminBookingService>();
 
         // ===== Emails (outbox) =====
         services.AddSingleton<BookingEmailComposer>();

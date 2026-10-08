@@ -16,4 +16,10 @@ public interface IEmailMessageRepository
     /// Tracked, because the sender marks each one Sent or Failed.
     /// </summary>
     Task<IReadOnlyList<EmailMessage>> GetPendingAsync(int batchSize, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Language of the booking's first email (the confirmation), so later emails
+    /// such as the cancellation reach the customer in the same language. Null if none.
+    /// </summary>
+    Task<string?> GetBookingLanguageAsync(int bookingId, CancellationToken cancellationToken = default);
 }
