@@ -1,0 +1,8 @@
+**/bin/
+**/obj/
+**/logs/
+**/.vs/
+**/*.user
+**/appsettings.Development.json
+Dockerfile
+.dockerignore
