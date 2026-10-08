@@ -4,6 +4,12 @@ export const TAX_RATE = 0.05;
 export const PHOTOGRAPHER_RATE = 30; // per hour
 export const OPEN_HOUR = 8;
 export const CLOSE_HOUR = 22;
+
+// Backend. Every request goes to API_BASE_URL + path (e.g. /studios).
+export const API_BASE_URL = 'http://localhost:8080/api';
+// Services still on src/data/mock read this; each one drops it once it is wired to the API.
+export const USE_MOCK = true;
+
 // Prototype dates (the design is set in October 2026). Replace with new Date() once a backend exists.
 export const MIN_DATE = '2026-10-08';
 export const CALENDAR_START = { year: 2026, month: 9 }; // month is 0-based
