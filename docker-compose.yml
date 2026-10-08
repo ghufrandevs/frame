@@ -30,5 +30,53 @@ services:
       - "${MAIL_SMTP_PORT}:1025"
     restart: unless-stopped
 
+  # ===== Backend API (.NET) =====
+  # Same settings as user-secrets, from .env; "Section:Key" becomes "Section__Key".
+  # Inside Docker, other containers are reached by name (frame-db, frame-mail), not localhost.
+  frame-api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: frame-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${API_ENVIRONMENT}
+      ConnectionStrings__Default: "Server=frame-db,1433;Database=FrameDb;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True"
+      Jwt__Key: ${JWT_KEY}
+      Admin__Email: ${ADMIN_EMAIL}
+      Admin__Password: ${ADMIN_PASSWORD}
+      Admin__FullName: ${ADMIN_FULLNAME}
+      Smtp__Host: frame-mail
+      Smtp__Port: "1025"
+    ports:
+      - "${API_PORT}:8080"
+    volumes:
+      - ./backend/Frame.Api/logs:/app/logs
+    depends_on:
+      frame-db:
+        condition: service_healthy
+      frame-mail:
+        condition: service_started
+    restart: unless-stopped
+
+  # ===== Customer website (static HTML/CSS/JS) =====
+  frame-web:
+    image: nginx:alpine
+    container_name: frame-web
+    ports:
+      - "${WEB_PORT}:80"
+    volumes:
+      - ./web:/usr/share/nginx/html:ro
+    restart: unless-stopped
+
+  # ===== Admin panel (static HTML/CSS/JS), separate site =====
+  frame-admin:
+    image: nginx:alpine
+    container_name: frame-admin
+    ports:
+      - "${ADMIN_PORT}:80"
+    volumes:
+      - ./admin:/usr/share/nginx/html:ro
+    restart: unless-stopped
+
 volumes:
   frame-db-data:
