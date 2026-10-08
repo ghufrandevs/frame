@@ -1,0 +1,40 @@
+.cardf {
+  background:#fff;
+  border:1px solid var(--b);
+  border-radius:20px;
+  padding:24px;
+  max-width:804px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  margin-top:20px;
+}
+.meth {
+  display:flex;
+  gap:12px;
+}
+.meth button {
+  flex:1;
+  height:48px;
+  border:1px solid var(--b);
+  border-radius:12px;
+  background:#fff;
+  font-weight:600;
+  font-size:13px;
+  transition:.25s;
+}
+.meth button:hover {
+  border-color:var(--g);
+}
+.meth button[aria-pressed=true] {
+  border-color:var(--g);
+  background:var(--pl);
+  box-shadow:inset 0 0 0 1px var(--g);
+}
+.apn {
+  background:var(--pl);
+  border-radius:12px;
+  padding:18px;
+  font-size:13px;
+  color:var(--m);
+}

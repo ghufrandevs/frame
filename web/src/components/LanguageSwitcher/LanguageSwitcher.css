@@ -1,0 +1,47 @@
+.lang {
+  position:relative;
+}
+.lang>button {
+  background:none;
+  border:0;
+  display:flex;
+  gap:5px;
+  align-items:center;
+  font-weight:500;
+  font-size:12px;
+  padding:8px 2px;
+}
+.lang ul {
+  position:absolute;
+  top:100%;
+  inset-inline-end:0;
+  margin:4px 0 0;
+  padding:6px;
+  list-style:none;
+  background:#fff;
+  border:1px solid var(--b);
+  border-radius:12px;
+  min-width:120px;
+  box-shadow:0 12px 28px #183e3222;
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(-6px);
+  transition:.2s;
+}
+.lang.o ul {
+  opacity:1;
+  pointer-events:auto;
+  transform:none;
+}
+.lang li button {
+  width:100%;
+  text-align:start;
+  background:none;
+  border:0;
+  padding:10px;
+  border-radius:8px;
+  font-size:13px;
+}
+.lang li button:hover {
+  background:var(--pl);
+}

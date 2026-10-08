@@ -1,0 +1,12 @@
+/* Design tokens (values from Figma). Change colours here. */
+:root {
+  --g:#183e32;
+  --m:#69766d;
+  --b:#dce3d8;
+  --bg:#f8f9f4;
+  --sh:#edf1e7;
+  --ft:#e6eddf;
+  --pl:#f1f4ed;
+  --r:#b3382c;
+}
+/* Breakpoints (used in responsive.css): tablet <= 1100px, mobile <= 560px */
