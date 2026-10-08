@@ -24,6 +24,7 @@ public static class DependencyInjection
         // ===== Admin =====
         services.AddScoped<IAdminBookingService, AdminBookingService>();
         services.AddScoped<IAdminStudioService, AdminStudioService>();
+        services.AddScoped<IAdminDashboardService, AdminDashboardService>();
 
         // ===== Emails (outbox) =====
         services.AddSingleton<BookingEmailComposer>();

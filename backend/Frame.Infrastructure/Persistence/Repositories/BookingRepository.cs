@@ -106,5 +106,25 @@ internal sealed class BookingRepository : IBookingRepository
             .Include(b => b.User)
             .FirstOrDefaultAsync(b => b.Id == bookingId, cancellationToken);
 
+    public async Task<IReadOnlyList<Booking>> GetConfirmedBetweenAsync(DateOnly from, DateOnly to, CancellationToken cancellationToken = default)
+        => await _db.Bookings
+            .AsNoTracking()
+            .Include(b => b.Studio)
+            .Include(b => b.User)
+            .Where(b => b.Status == BookingStatus.Confirmed
+                        && b.BookingDate >= from
+                        && b.BookingDate <= to)
+            .OrderBy(b => b.BookingDate)
+            .ThenBy(b => b.StartHour)
+            .ToListAsync(cancellationToken);
+
+    public async Task<IReadOnlyList<Booking>> GetPaidOrCancelledSinceAsync(DateTime sinceUtc, CancellationToken cancellationToken = default)
+        => await _db.Bookings
+            .AsNoTracking()
+            .Include(b => b.Studio)
+            .Where(b => b.PaidAt >= sinceUtc
+                        || (b.CancelledAt != null && b.CancelledAt >= sinceUtc))
+            .ToListAsync(cancellationToken);
+
     public void Add(Booking booking) => _db.Bookings.Add(booking);
 }

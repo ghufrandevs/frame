@@ -4,7 +4,8 @@ namespace Frame.Application.Common.Abstractions.Persistence;
 
 /// <summary>
 /// Data access for bookings: availability reads, the clash check,
-/// the booking number sequence, customer and admin reads, and adding new bookings.
+/// the booking number sequence, customer and admin reads, dashboard reads,
+/// and adding new bookings.
 /// </summary>
 public interface IBookingRepository
 {
@@ -55,6 +56,18 @@ public interface IBookingRepository
 
     /// <summary>One booking with its studio and customer, TRACKED so it can be changed (admin cancel).</summary>
     Task<Booking?> GetByIdForUpdateAsync(int bookingId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Confirmed bookings of every studio between two dates, both included, with studio
+    /// and customer, ordered by date and hour. Dashboard: occupancy and today's list. Read-only.
+    /// </summary>
+    Task<IReadOnlyList<Booking>> GetConfirmedBetweenAsync(DateOnly from, DateOnly to, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Bookings paid or cancelled since a UTC time, with their studio. Dashboard: revenue,
+    /// count and refunds. The caller narrows to the Muscat month with IClock.ToMuscat. Read-only.
+    /// </summary>
+    Task<IReadOnlyList<Booking>> GetPaidOrCancelledSinceAsync(DateTime sinceUtc, CancellationToken cancellationToken = default);
 
     /// <summary>Tracks a new booking. Written to the database by IUnitOfWork.</summary>
     void Add(Booking booking);
