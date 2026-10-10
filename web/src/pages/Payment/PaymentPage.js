@@ -3,7 +3,7 @@ import { navigate } from '../../router.js';
 import { getStudioById } from '../../services/studioService.js';
 import * as bookingService from '../../services/bookingService.js';
 import * as paymentService from '../../services/paymentService.js';
-import { bookingState, setPaymentMethod, setStep, calculatePricing, toBookingPayload } from '../../state/bookingState.js';
+import { bookingState, setPaymentMethod, setStep } from '../../state/bookingState.js';
 import { userState } from '../../state/userState.js';
 import { money } from '../../utils/formatting.js';
 import { Button } from '../../components/Button/Button.js';
@@ -18,8 +18,9 @@ export const PaymentPage = {
     const b = bookingState.get();
     studio = await getStudioById(b.studioId);
     if (!studio) return { redirect: '/' };
+    if (!b.quote) return { redirect: `/reservation/${studio.id}` }; // no price yet: pick a session first
     setStep(2);
-    return `<section class="pg"><h1>${t('payment.title')}</h1>${BookingProgress({ step: 2 })}<form class="cardf" novalidate>${renderPaymentMethod(b.paymentMethod)}${renderCardPaymentForm({ name: userState.get().name })}<p class="apn" id="ap" hidden>${t('payment.applePayNote')}</p><div class="ctl">${Button({ label: `${t('payment.payNow')} · ${money(calculatePricing(studio).total)}`, large: true, id: 'pn' })}${Button({ label: t('common.cancel'), variant: 'light', large: true, id: 'pc' })}</div><p class="note">${t('payment.prototype')}</p></form></section>`;
+    return `<section class="pg"><h1>${t('payment.title')}</h1>${BookingProgress({ step: 2 })}<form class="cardf" novalidate>${renderPaymentMethod(b.paymentMethod)}${renderCardPaymentForm({ name: userState.get().name })}<p class="apn" id="ap" hidden>${t('payment.applePayNote')}</p><div class="ctl">${Button({ label: `${t('payment.payNow')} · ${money(b.quote.total)}`, large: true, id: 'pn' })}${Button({ label: t('common.cancel'), variant: 'light', large: true, id: 'pc' })}</div><p class="note">${t('payment.prototype')}</p></form></section>`;
   },
 
   mount(root) {
@@ -36,9 +37,10 @@ export const PaymentPage = {
       const button = e.currentTarget;
       button.disabled = true;
       button.textContent = t('payment.processing');
-      const payment = await paymentService.processPayment({ method, amount: calculatePricing(studio).total, ...(method === 'card' ? card.getSummary() : {}) });
+      const payment = await paymentService.processPayment({ method, amount: bookingState.get().quote.total, ...(method === 'card' ? card.getSummary() : {}) });
       if (payment.status === 'succeeded') {
-        await bookingService.createBooking(toBookingPayload(studio));
+        const { date, startHour, endHour } = bookingState.get();
+        await bookingService.createBooking({ studioId: studio.id, date, startHour, endHour });
         navigate('/booking-success');
       }
     };

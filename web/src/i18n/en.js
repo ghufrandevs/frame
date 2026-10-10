@@ -68,11 +68,10 @@ export default {
     startTime: "Start time",
     endTime: "End time",
     durationSingle: "{h}-hour session · Include setup and pack-down time.",
-    durationMulti: "{d} days × {h}-hour sessions · Include setup and pack-down time.",
     photographer: "Photographer",
     photographerNote: "Creative support for all {h} hours",
     studio: "Studio",
-    tax: "TAX 5%",
+    tax: "TAX {p}%",
     total: "Session total",
     continue: "Continue to reservation",
     review: "Review your details before confirming. ",
@@ -86,7 +85,11 @@ export default {
       "S",
       "S"
     ],
-    hoursWord: "hours"
+    hoursWord: "hours",
+    noHours: "This day is fully booked. Please pick another day.",
+    pickDay: "Pick a day",
+    previousMonth: "Previous month",
+    nextMonth: "Next month"
   },
   payment: {
     title: "Payment Details",
@@ -147,5 +150,14 @@ export default {
     ],
     openMaps: "Open in Google Maps",
     note: "Example address. Replace with your final studio address."
+  },
+  errors: {
+    NETWORK_ERROR: "We can't reach the server right now. Check your connection and try again.",
+    UNKNOWN_ERROR: "Something went wrong. Please try again.",
+    VALIDATION_ERROR: "Some details are missing or not valid.",
+    STUDIO_NOT_FOUND: "This studio is not available right now.",
+    SLOT_TAKEN: "Sorry, someone just booked these hours. Please pick another time.",
+    PAST_TIME: "This time has already passed. Please pick a later time.",
+    TOO_FAR_AHEAD: "Bookings can be made up to one year ahead."
   }
 };

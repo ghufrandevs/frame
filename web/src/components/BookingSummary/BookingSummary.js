@@ -1,18 +1,23 @@
-import { PHOTOGRAPHER_RATE } from '../../data/config.js';
 import { t } from '../../i18n/i18n.js';
 import { money } from '../../utils/formatting.js';
 
+// Price rows, straight from the server's quote (POST /bookings/quote). Nothing is calculated here.
+// quote = { hours, hourlyRate, photographerRatePerHour, photographerFee, subtotal, vatRate, vatAmount, total }
 const totalRow = (total) => `<div class="tt"><span>${t('booking.total')}</span><span>${money(total)}</span></div>`;
 
-// Price rows. pricing = calculatePricing(); totalOnly renders just the total line (success page).
-export function renderBookingSummary({ studio, pricing, photographer, totalOnly = false }) {
-  if (totalOnly) return `<div class="pr">${totalRow(pricing.total)}</div>`;
-  const h = pricing.hours;
-  return `<div class="pr" id="pr">${summaryRows(studio, pricing, photographer, h)}</div>`;
+function summaryRows(q) {
+  const studio = `<div><span>${t('booking.studio')} &nbsp; ${q.hourlyRate} × ${q.hours} ${t('booking.hoursWord')}</span><span>${money(q.subtotal - q.photographerFee)}</span></div>`;
+  const photographer = q.photographerFee > 0 ? `<div><span>${t('booking.photographer')} &nbsp; ${q.photographerRatePerHour} × ${q.hours}</span><span>${money(q.photographerFee)}</span></div>` : '';
+  const tax = `<div><span>${t('booking.tax', { p: q.vatRate * 100 })}</span><span>${money(q.vatAmount)}</span></div>`;
+  return studio + photographer + tax + totalRow(q.total);
 }
-const summaryRows = (studio, pricing, photographer, h) =>
-  `<div><span>${t('booking.studio')} &nbsp; ${studio.ratePerHour} × ${h} ${t('booking.hoursWord')}</span><span>${money(pricing.studioCost)}</span></div>${photographer ? `<div><span>${t('booking.photographer')} &nbsp; ${PHOTOGRAPHER_RATE} × ${h}</span><span>${money(pricing.photographerCost)}</span></div>` : ''}<div><span>${t('booking.tax')}</span><span>${money(pricing.tax)}</span></div>${totalRow(pricing.total)}`;
 
-export function updateBookingSummary(root, props) {
-  root.querySelector('#pr').innerHTML = summaryRows(props.studio, props.pricing, props.photographer, props.pricing.hours);
+// totalOnly renders just the total line (success page). With no quote yet the box stays empty.
+export function renderBookingSummary({ quote, totalOnly = false }) {
+  if (totalOnly) return `<div class="pr">${totalRow(quote.total)}</div>`;
+  return `<div class="pr" id="pr">${quote ? summaryRows(quote) : ''}</div>`;
+}
+
+export function updateBookingSummary(root, quote) {
+  root.querySelector('#pr').innerHTML = quote ? summaryRows(quote) : '';
 }
