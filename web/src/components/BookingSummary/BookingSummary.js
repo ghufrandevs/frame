@@ -12,11 +12,11 @@ function summaryRows(q) {
   return studio + photographer + tax + totalRow(q.total);
 }
 
-// totalOnly renders just the total line (success page). With no quote yet the box stays empty.
-export function renderBookingSummary({ quote, totalOnly = false }) {
-  if (totalOnly) return `<div class="pr">${totalRow(quote.total)}</div>`;
-  return `<div class="pr" id="pr">${quote ? summaryRows(quote) : ''}</div>`;
-}
+// With no quote yet the box stays empty.
+export const renderBookingSummary = ({ quote }) => `<div class="pr" id="pr">${quote ? summaryRows(quote) : ''}</div>`;
+
+// Just the total line, e.g. the invoice total on the success page.
+export const renderTotal = (total) => `<div class="pr">${totalRow(total)}</div>`;
 
 export function updateBookingSummary(root, quote) {
   root.querySelector('#pr').innerHTML = quote ? summaryRows(quote) : '';

@@ -3,8 +3,6 @@
 import { API_BASE_URL } from '../data/config.js';
 import { getLanguage } from '../i18n/i18n.js';
 
-export { USE_MOCK } from '../data/config.js';
-
 const TOKEN_KEY = 'frame_token';
 const NETWORK_ERROR = 'NETWORK_ERROR';
 const UNKNOWN_ERROR = 'UNKNOWN_ERROR';

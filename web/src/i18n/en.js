@@ -5,7 +5,8 @@ export default {
     discover: "Discover studios",
     location: "Location",
     contact: "Contact",
-    profile: "Profile"
+    profile: "Profile",
+    login: "Log in"
   },
   home: {
     eyebrow: "ROOM TO CREATE",
@@ -17,24 +18,16 @@ export default {
   },
   studios: {
     'daylight-loft': {
-      name: "The Daylight Loft",
-      category: "Photography",
-      description: "A clean canvas for portraits, products and your next campaign."
+      category: "Photography"
     },
     'edit-suite': {
-      name: "The Edit Suite",
-      category: "Post-production",
-      description: "A focused setting for your edit, colour grade and final mix."
+      category: "Post-production"
     },
     'content-room': {
-      name: "The Content Room",
-      category: "Podcast & content",
-      description: "Settle in for conversations, interviews and stories worth sharing."
+      category: "Podcast & content"
     },
     'chroma-stage': {
-      name: "The Chroma Stage",
-      category: "Film & green screen",
-      description: "Room to build new worlds, from motion tests to full productions."
+      category: "Film & green screen"
     }
   },
   studio: {
@@ -100,11 +93,9 @@ export default {
     expiry: "Expiry Date",
     cvv: "CVV",
     payNow: "Pay Now",
-    prototype: "Prototype only — no real payment is processed.",
-    applePayNote: "Apple Pay (prototype): confirm with Pay Now to complete your booking.",
     errors: {
-      name: "Enter the name on your card",
-      number: "Card number must be 16 digits",
+      name: "Enter the name on your card (at least 3 letters)",
+      number: "Enter a valid Visa or Mastercard number (16 digits)",
       expiry: "Use a valid future date (MM / YY)",
       cvv: "CVV must be 3 digits"
     },
@@ -123,11 +114,12 @@ export default {
     checkEmail: "Check your email",
     checkEmailBody: "A confirmation email will be sent to {e}.",
     backHome: "Back to Home",
-    viewProfile: "View My Profile"
+    viewProfile: "View My Profile",
+    bookingNumber: "Booking number",
+    paidWith: "Paid with"
   },
   profile: {
     title: "My profile",
-    changePhoto: "Change Photo",
     edit: "Edit Profile",
     personal: "Personal information",
     fullName: "Full name",
@@ -135,8 +127,11 @@ export default {
     save: "Save changes",
     upcoming: "Upcoming booking",
     saved: "Profile saved",
-    photoUpdated: "Photo updated",
-    viewStudio: "View studio"
+    viewStudio: "View studio",
+    logout: "Log out",
+    noUpcoming: "You have no upcoming bookings yet.",
+    bookStudio: "Book a studio",
+    allBookings: "Your bookings"
   },
   location: {
     getDirections: "Get Directions",
@@ -148,8 +143,7 @@ export default {
       "Building No. 1-21",
       "Muscat Governorate, Oman"
     ],
-    openMaps: "Open in Google Maps",
-    note: "Example address. Replace with your final studio address."
+    openMaps: "Open in Google Maps"
   },
   errors: {
     NETWORK_ERROR: "We can't reach the server right now. Check your connection and try again.",
@@ -158,6 +152,34 @@ export default {
     STUDIO_NOT_FOUND: "This studio is not available right now.",
     SLOT_TAKEN: "Sorry, someone just booked these hours. Please pick another time.",
     PAST_TIME: "This time has already passed. Please pick a later time.",
-    TOO_FAR_AHEAD: "Bookings can be made up to one year ahead."
+    TOO_FAR_AHEAD: "Bookings can be made up to one year ahead.",
+    UNAUTHORIZED: "Please log in to continue.",
+    FORBIDDEN: "You don't have access to this page.",
+    NOT_FOUND: "We couldn't find what you're looking for.",
+    TOO_MANY_REQUESTS: "Too many attempts. Please wait a minute and try again.",
+    INTERNAL_ERROR: "Something went wrong on our side. Please try again.",
+    EMAIL_TAKEN: "An account with this email already exists. Try logging in.",
+    INVALID_CREDENTIALS: "Email or password is incorrect.",
+    BOOKING_NOT_FOUND: "We couldn't find this booking.",
+    STUDIO_INACTIVE: "This studio is not taking bookings right now.",
+    PAYMENT_DECLINED: "Your card was declined. Nothing was charged. Try another card.",
+    INSUFFICIENT_FUNDS: "Your card has insufficient funds. Nothing was charged.",
+    PAYMENT_FAILED: "The payment could not be completed. Nothing was charged. Please try again.",
+    REFUND_FAILED: "The refund could not be completed. Please contact us."
+  },
+  fieldErrors: {
+    INVALID: "This value is not valid.",
+    REQUIRED: "This field is required.",
+    TOO_LONG: "This is too long.",
+    EMAIL_INVALID: "Enter a valid email address.",
+    PHONE_INVALID: "Enter an Omani mobile number: 8 digits starting with 7 or 9.",
+    PASSWORD_WEAK: "Use at least 8 characters with letters and numbers.",
+    NAME_TOO_SHORT: "Enter at least 3 letters."
+  },
+  status: {
+    Upcoming: "Upcoming",
+    InProgress: "In progress",
+    Completed: "Completed",
+    Cancelled: "Cancelled"
   }
 };

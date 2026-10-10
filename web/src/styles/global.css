@@ -36,3 +36,7 @@ main {
 #header, #footer {
   display: contents; /* wrappers must not break the sticky header */
 }
+/* The hidden attribute always wins, even over components that set display:flex. */
+[hidden] {
+  display:none !important;
+}
