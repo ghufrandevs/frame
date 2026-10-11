@@ -53,13 +53,17 @@
   font-size:13px;
   transition:transform .25s,box-shadow .25s;
 }
-.go:hover {
+.go[disabled] {
+  opacity:.5;
+  cursor:not-allowed;
+}
+.go:hover:not([disabled]) {
   transform:translateY(-2px);
   box-shadow:0 12px 24px #183e3238;
 }
 .go svg {
   transition:transform .25s;
 }
-.go:hover svg {
+.go:hover:not([disabled]) svg {
   transform:translateX(4px);
 }

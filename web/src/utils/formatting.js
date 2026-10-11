@@ -1,8 +1,7 @@
 import { CURRENCY } from '../data/config.js';
 
-export const roundMoney = (x) => Math.round(x * 100) / 100;
-// Currency label + amount, styled by .cur
-export const money = (value) => `<span class="cur">${CURRENCY}</span>${value}`;
+// Currency label + amount, styled by .cur. Rials have up to 3 decimals: 8.25, 173.25, 0.125.
+export const money = (value) => `<span class="cur">${CURRENCY}</span>${Number(value).toLocaleString('en-US', { maximumFractionDigits: 3 })}`;
 
 export const formatCardNumber = (raw) => raw.replace(/\D/g, '').slice(0, 16).replace(/(.{4})(?=.)/g, '$1 ');
 export function formatExpiry(raw, deleting = false) {
@@ -11,3 +10,6 @@ export function formatExpiry(raw, deleting = false) {
   return v.length === 2 && !deleting ? `${v} / ` : v;
 }
 export const formatCVV = (raw) => raw.replace(/\D/g, '').slice(0, 3);
+
+// Text from the server goes into HTML strings, so it is escaped first: a name like "<b>" shows as text.
+export const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]);

@@ -5,8 +5,6 @@ const pad = (n) => String(n).padStart(2, '0');
 
 export const toISO = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 export const parseISO = (s) => { const [y, m, d] = s.split('-'); return new Date(+y, +m - 1, +d); };
-export const daysBetween = (a, b) => Math.round((parseISO(b) - parseISO(a)) / 864e5);
-export const isDateRangeValid = (start, end) => !!start && (end == null || end >= start);
 
 // "Thursday, 15 October 2026" (weekday optional)
 export function formatLongDate(iso, withWeekday = true) {

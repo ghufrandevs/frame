@@ -1,12 +1,8 @@
-import { api, USE_MOCK } from './api.js';
-import { mockUser } from '../data/mock/users.js';
+import { api } from './api.js';
 
-let user = { ...mockUser };
+// GET /auth/me -> ProfileResponse = { id, fullName, email, phone, role }
+// PUT /auth/me { fullName, phone } -> ProfileResponse (the email cannot change: it is the login name)
+const toUser = (p) => ({ name: p.fullName, email: p.email, phone: p.phone });
 
-// Expected API: GET /me   PUT /me   (photo can be a URL or data URL until uploads exist)
-export const getProfile = async () => (USE_MOCK ? { ...user } : api.get('/me'));
-export const updateProfile = async (patch) => {
-  if (!USE_MOCK) return api.put('/me', patch);
-  user = { ...user, ...patch };
-  return { ...user };
-};
+export const getProfile = async () => toUser(await api.get('/auth/me'));
+export const updateProfile = async ({ name, phone }) => toUser(await api.put('/auth/me', { fullName: name.trim(), phone: phone.trim() }));

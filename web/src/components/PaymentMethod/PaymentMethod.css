@@ -23,7 +23,11 @@
   font-size:13px;
   transition:.25s;
 }
-.meth button:hover {
+.meth button[disabled] {
+  opacity:.45;
+  cursor:not-allowed;
+}
+.meth button:hover:not([disabled]) {
   border-color:var(--g);
 }
 .meth button[aria-pressed=true] {

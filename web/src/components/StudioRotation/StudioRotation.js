@@ -1,9 +1,10 @@
 import { t } from '../../i18n/i18n.js';
+import { escapeHtml } from '../../utils/formatting.js';
 
 // Studios sit on the faces of a prism (a square when there are 4). Only the prism rotates (CSS 3D);
 // the green background box stays still. Also renders the "Discover other studios" thumbnails.
 export function renderStudioRotation(studios) {
-  const faces = studios.map((s, i) => `<div class="face" data-index="${i}"><img src="${s.image}" alt="${t(`studios.${s.id}.name`)}"></div>`).join('');
+  const faces = studios.map((s, i) => `<div class="face" data-index="${i}"><img src="${s.image}" alt="${escapeHtml(s.name)}"></div>`).join('');
   return `<div class="show" id="show"><div class="prism" id="prism">${faces}</div></div><div class="dsc"><div class="dh"><i></i><span>${t('booking.discoverOther')}</span><i></i></div><div class="th fade" id="th"></div></div>`;
 }
 
@@ -33,7 +34,7 @@ export function mountStudioRotation(root, { studios, currentId, onSelect }) {
     layout();
   }
   function renderThumbs(activeId) {
-    thumbs.innerHTML = studios.filter((s) => s.id !== activeId).map((s) => `<button data-studio-id="${s.id}" aria-label="${t(`studios.${s.id}.name`)}"><img src="${s.image}" alt="${t(`studios.${s.id}.name`)}"></button>`).join('');
+    thumbs.innerHTML = studios.filter((s) => s.id !== activeId).map((s) => `<button data-studio-id="${s.id}" aria-label="${escapeHtml(s.name)}"><img src="${s.image}" alt="${escapeHtml(s.name)}"></button>`).join('');
   }
   thumbs.addEventListener('click', (e) => { const b = e.target.closest('[data-studio-id]'); if (b) onSelect(b.dataset.studioId); });
   window.addEventListener('resize', onResize);

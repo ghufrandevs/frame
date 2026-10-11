@@ -1,4 +1,4 @@
-// Route table. navId = which header link is underlined. Add new pages here.
+// Route table. navId = which header link is underlined. auth = only for logged-in customers. Add new pages here.
 import { HomePage } from './pages/Home/HomePage.js';
 import { ReservationPage } from './pages/Reservation/ReservationPage.js';
 import { PaymentPage } from './pages/Payment/PaymentPage.js';
@@ -10,8 +10,8 @@ export const routes = [
   { path: '/', navId: 'home', page: HomePage },
   { path: '/reservation/:studioId', navId: 'studios', page: ReservationPage },
   { path: '/studios/:studioId', redirect: ({ studioId }) => `/reservation/${studioId}` },
-  { path: '/payment', page: PaymentPage },
-  { path: '/booking-success', page: BookingSuccessPage },
-  { path: '/profile', page: ProfilePage },
+  { path: '/payment', page: PaymentPage, auth: true },
+  { path: '/booking-success', page: BookingSuccessPage, auth: true },
+  { path: '/profile', page: ProfilePage, auth: true },
   { path: '/location', navId: 'location', page: LocationPage },
 ];

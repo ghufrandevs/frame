@@ -1,14 +1,15 @@
 import { t } from '../../i18n/i18n.js';
-import { formatCardNumber, formatExpiry, formatCVV } from '../../utils/formatting.js';
+import { formatCardNumber, formatExpiry, formatCVV, escapeHtml } from '../../utils/formatting.js';
 import { validateCardName, validateCardNumber, validateExpiryDate, validateCVV } from '../../utils/validation.js';
 
 const field = (id, label, attrs) => `<div class="ff"><label for="${id}">${label}</label><input id="${id}" ${attrs}><div class="er"></div></div>`;
 
-export const renderCardPaymentForm = ({ name }) => `<div id="cf" style="border-top:1px solid var(--b);padding-top:18px">${field('cn', t('payment.cardName'), `autocomplete="cc-name" value="${name}"`)}${field('cc', t('payment.cardNumber'), 'dir="ltr" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" maxlength="19"')}<div class="rw">${field('ce', t('payment.expiry'), 'dir="ltr" inputmode="numeric" autocomplete="cc-exp" placeholder="MM / YY" maxlength="7"')}${field('cv', t('payment.cvv'), 'dir="ltr" inputmode="numeric" autocomplete="cc-csc" placeholder="000" maxlength="3"')}</div></div>`;
+export const renderCardPaymentForm = ({ name }) => `<div id="cf" style="border-top:1px solid var(--b);padding-top:18px">${field('cn', t('payment.cardName'), `autocomplete="cc-name" value="${escapeHtml(name)}"`)}${field('cc', t('payment.cardNumber'), 'dir="ltr" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" maxlength="19"')}<div class="rw">${field('ce', t('payment.expiry'), 'dir="ltr" inputmode="numeric" autocomplete="cc-exp" placeholder="MM / YY" maxlength="7"')}${field('cv', t('payment.cvv'), 'dir="ltr" inputmode="numeric" autocomplete="cc-csc" placeholder="000" maxlength="3"')}</div></div>`;
 
-// Input formatting + inline validation. Returns { validate(), setVisible(bool), getValues() }.
+// Input formatting + inline validation. Returns { validate(), takeCardNumber(), setDisabled(bool) }.
 export function mountCardPaymentForm(root) {
-  const box = root.querySelector('#cf'), q = (id) => root.querySelector(id);
+  const q = (id) => root.querySelector(id);
+  const inputs = ['#cn', '#cc', '#ce', '#cv'].map(q);
   const checks = [
     [q('#cn'), validateCardName, 'payment.errors.name'],
     [q('#cc'), validateCardNumber, 'payment.errors.number'],
@@ -39,8 +40,13 @@ export function mountCardPaymentForm(root) {
       checks[results.indexOf(false)]?.[0].focus();
       return results.every(Boolean);
     },
-    setVisible: (visible) => (box.hidden = !visible),
-    // Last 4 digits only: never keep full card data around.
-    getSummary: () => ({ last4: q('#cc').value.replace(/\s/g, '').slice(-4) }),
+    // Hands the card number over once and clears the number, expiry and CVV from the page,
+    // so card data never stays in the browser after the token is made.
+    takeCardNumber() {
+      const number = q('#cc').value;
+      ['#cc', '#ce', '#cv'].forEach((id) => { q(id).value = ''; q(id).classList.remove('good', 'bad'); });
+      return number;
+    },
+    setDisabled: (disabled) => inputs.forEach((el) => (el.disabled = disabled)),
   };
 }
