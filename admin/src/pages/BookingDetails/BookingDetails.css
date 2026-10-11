@@ -1,0 +1,38 @@
+.back {
+  font-size:14px;
+  font-weight:600;
+  text-decoration:none;
+  align-self:flex-start;
+}
+.back:hover {
+  text-decoration:underline;
+}
+.details-head {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:16px;
+}
+.details-title {
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.details-title h1 {
+  margin:0;
+  font-size:52px;
+  font-weight:600;
+  line-height:1.08;
+}
+.details-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:20px;
+  align-items:start;
+}
+.muted-inline {
+  color:var(--m);
+  font-weight:400;
+  font-size:.85em;
+}

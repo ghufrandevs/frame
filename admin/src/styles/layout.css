@@ -1,4 +1,4 @@
-/* Page frame, page title and the white panels every admin page uses. */
+/* Page frame and cards, same sizes as the customer site (.pg, .cd). */
 .page {
   padding:32px var(--px) 56px;
   display:flex;
@@ -7,27 +7,48 @@
 }
 .page-head h1 {
   margin:0;
-  font-size:40px;
+  font-size:52px;
   font-weight:600;
+  line-height:1.08;
 }
 .page-sub {
-  margin:4px 0 0;
+  margin:8px 0 0;
   color:var(--m);
-  font-size:14px;
+  font-size:16px;
 }
+/* White card (tables, details). */
 .panel {
   background:#fff;
   border:1px solid var(--b);
-  border-radius:16px;
-  padding:22px;
+  border-radius:20px;
+  padding:24px;
+  min-width:0;
+}
+/* Light green card (dashboard design). */
+.panel-soft {
+  background:var(--ft);
+  border-color:transparent;
+}
+.panel-head {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:8px 16px;
+  margin-bottom:18px;
 }
 .panel-title {
-  margin:0 0 18px;
-  font-size:18px;
+  margin:0;
+  font-size:20px;
   font-weight:600;
 }
 .panel-hint {
   font-size:12px;
-  font-weight:500;
+  font-weight:600;
   color:var(--m);
+}
+.muted {
+  margin:0;
+  color:var(--m);
+  font-size:13px;
 }

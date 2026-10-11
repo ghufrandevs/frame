@@ -25,7 +25,7 @@
   grid-column:1 / -1;
   height:8px;
   border-radius:100px;
-  background:var(--b);
+  background:#d3dccd;
   overflow:hidden;
 }
 .rb-fill {
@@ -33,4 +33,10 @@
   height:100%;
   border-radius:100px;
   background:var(--ac);
+  transform-origin:left;
+  animation:rb-grow .8s cubic-bezier(.2,.8,.2,1) both;
 }
+[dir=rtl] .rb-fill {
+  transform-origin:right;
+}
+@keyframes rb-grow{from{transform:scaleX(0)}}

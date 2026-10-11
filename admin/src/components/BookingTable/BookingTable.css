@@ -11,32 +11,59 @@
   font-size:12px;
   font-weight:500;
   color:var(--m);
-  padding:0 12px 10px;
+  padding:0 12px 12px;
   border-bottom:1px solid var(--b);
+  white-space:nowrap;
 }
 .bt td {
-  padding:12px;
+  padding:14px 12px;
   border-bottom:1px solid var(--sh);
   white-space:nowrap;
   font-variant-numeric:tabular-nums;
 }
-.bt tr:last-child td {
+.bt tbody tr {
+  cursor:pointer;
+  transition:background .15s;
+}
+.bt tbody tr:hover {
+  background:var(--pl);
+}
+.bt tbody tr:last-child td {
   border-bottom:0;
 }
 .bt-num {
   font-weight:600;
+  text-decoration:none;
+}
+.bt-num:hover {
+  text-decoration:underline;
 }
 .bt-empty {
-  margin:0;
+  padding:24px 0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  text-align:center;
   color:var(--m);
   font-size:14px;
 }
+.bt-empty p {
+  margin:0;
+}
+/* Status badge, same shape as the customer site (.bdg). */
 .badge {
-  font-size:12px;
+  display:inline-block;
+  font-size:11px;
   font-weight:600;
   padding:4px 10px;
   border-radius:100px;
   background:var(--ft);
+  white-space:nowrap;
+}
+.badge-InProgress {
+  background:#dff0e3;
+  color:var(--ac);
 }
 .badge-Completed {
   background:var(--sh);
@@ -45,4 +72,43 @@
 .badge-Cancelled {
   background:#fbe9e7;
   color:var(--r);
+}
+/* Phones: every row becomes a small card, each value with its label. */
+@media (max-width:640px) {
+  .bt thead {
+    display:none;
+  }
+  .bt, .bt tbody, .bt tr, .bt td {
+    display:block;
+    width:100%;
+  }
+  .bt tbody {
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .bt tbody tr {
+    border:1px solid var(--b);
+    border-radius:16px;
+    padding:6px 14px;
+    background:#fff;
+  }
+  .bt td, .bt tbody tr:last-child td {
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    padding:8px 0;
+    border-bottom:1px solid var(--sh);
+    white-space:normal;
+    text-align:end;
+  }
+  .bt td:last-child {
+    border-bottom:0;
+  }
+  .bt td::before {
+    content:attr(data-label);
+    color:var(--m);
+    font-size:12px;
+    text-align:start;
+  }
 }

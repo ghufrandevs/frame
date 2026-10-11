@@ -1,0 +1,35 @@
+.filters {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-end;
+  gap:12px;
+}
+.filters .field {
+  min-width:220px;
+}
+.seg {
+  display:flex;
+  gap:8px;
+}
+.seg .btn[aria-pressed=true] {
+  background:var(--g);
+  border-color:var(--g);
+  color:#fff;
+}
+.results-count {
+  margin-bottom:12px;
+}
+.pager {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+  margin-top:20px;
+  font-size:13px;
+}
+#bookingsResults {
+  transition:opacity .2s;
+}
+#bookingsResults[aria-busy] {
+  opacity:.5;
+}
