@@ -1,0 +1,26 @@
+* {
+  box-sizing:border-box;
+}
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--g);
+  font:400 14px/1.5 Inter,"Noto Sans Arabic",system-ui,sans-serif;
+}
+[dir=rtl] body {
+  font-family:"Noto Sans Arabic",Inter,sans-serif;
+}
+button {
+  font:inherit;
+  cursor:pointer;
+}
+:focus-visible {
+  outline:3px solid #7aa88e;
+  outline-offset:2px;
+}
+#header, #footer {
+  display:contents;
+}
+[hidden] {
+  display:none !important;
+}

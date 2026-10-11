@@ -1,0 +1,33 @@
+/* Page frame, page title and the white panels every admin page uses. */
+.page {
+  padding:32px var(--px) 56px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+.page-head h1 {
+  margin:0;
+  font-size:40px;
+  font-weight:600;
+}
+.page-sub {
+  margin:4px 0 0;
+  color:var(--m);
+  font-size:14px;
+}
+.panel {
+  background:#fff;
+  border:1px solid var(--b);
+  border-radius:16px;
+  padding:22px;
+}
+.panel-title {
+  margin:0 0 18px;
+  font-size:18px;
+  font-weight:600;
+}
+.panel-hint {
+  font-size:12px;
+  font-weight:500;
+  color:var(--m);
+}

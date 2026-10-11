@@ -1,0 +1,65 @@
+.ah {
+  height:72px;
+  display:flex;
+  align-items:center;
+  gap:24px;
+  padding:0 var(--px);
+  border-bottom:1px solid var(--b);
+  background:var(--bg);
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+.ah-brand {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:28px;
+  font-weight:600;
+  color:var(--g);
+  text-decoration:none;
+}
+.ah-brand svg {
+  width:28px;
+  height:28px;
+}
+.ah-badge {
+  font-size:11px;
+  font-weight:600;
+  background:var(--ft);
+  padding:3px 8px;
+  border-radius:100px;
+}
+.ah-nav {
+  display:flex;
+  gap:28px;
+  margin-inline:auto;
+}
+.ah-nav a {
+  font-weight:600;
+  font-size:14px;
+  color:var(--g);
+  text-decoration:none;
+  padding:10px 0;
+  border-bottom:2px solid transparent;
+}
+.ah-nav a.on,.ah-nav a:hover {
+  border-bottom-color:var(--g);
+}
+.ah-act {
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-inline-start:auto;
+}
+.ah-nav + .ah-act {
+  margin-inline-start:0;
+}
+.ah-lang {
+  background:none;
+  border:0;
+  font-weight:600;
+  font-size:13px;
+  color:var(--g);
+  padding:8px 4px;
+}

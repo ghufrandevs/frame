@@ -1,0 +1,15 @@
+/* Tablet: less padding. Mobile: smaller padding, cards stack, nav moves under the logo. */
+@media (max-width:1000px) {
+  :root { --px:32px; }
+}
+@media (max-width:640px) {
+  :root { --px:16px; }
+  .stats { grid-template-columns:1fr; }
+  .af { padding:24px; }
+  .page-head h1 { font-size:30px; }
+  .ah { flex-wrap:wrap; height:auto; padding-block:12px; gap:12px; }
+  .ah-brand { font-size:22px; }
+  .ah-act { gap:10px; }
+  .ah-nav { order:3; width:100%; margin:0; }
+  .ah-nav + .ah-act { margin-inline-start:auto; }
+}

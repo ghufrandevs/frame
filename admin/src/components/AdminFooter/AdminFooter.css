@@ -1,0 +1,66 @@
+.af {
+  margin:0 var(--px) 32px;
+  background:var(--ft);
+  border-radius:24px;
+  padding:36px;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+}
+.af-row {
+  display:flex;
+  justify-content:space-between;
+  gap:24px;
+  flex-wrap:wrap;
+}
+.af-brand {
+  display:flex;
+  gap:10px;
+  align-items:center;
+  font-weight:600;
+  font-size:24px;
+  line-height:1;
+}
+.af-brand svg {
+  width:28px;
+  height:28px;
+}
+.af-tagline {
+  margin:14px 0 0;
+  font-size:13px;
+  line-height:1.7;
+  color:var(--m);
+}
+.af-phone {
+  margin:0;
+  display:flex;
+  gap:6px;
+  align-items:center;
+  font-size:16px;
+}
+.af-social {
+  display:flex;
+  gap:16px;
+  margin-top:6px;
+}
+.af-social a {
+  width:24px;
+  height:24px;
+  color:var(--g);
+  transition:transform .25s;
+}
+.af-social a:hover {
+  transform:translateY(-3px) scale(1.12);
+}
+.af-social svg {
+  width:24px;
+  height:24px;
+}
+.af-legal {
+  margin:0;
+  border-top:1px solid var(--b);
+  padding-top:12px;
+  text-align:center;
+  font-size:11px;
+  color:var(--m);
+}

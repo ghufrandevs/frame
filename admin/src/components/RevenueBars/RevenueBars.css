@@ -1,0 +1,36 @@
+.rb {
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+.rb-row {
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px 16px;
+  align-items:baseline;
+}
+.rb-name {
+  font-weight:600;
+  font-size:15px;
+}
+.rb-value {
+  font-weight:600;
+  font-size:14px;
+  font-variant-numeric:tabular-nums;
+}
+.rb-track {
+  grid-column:1 / -1;
+  height:8px;
+  border-radius:100px;
+  background:var(--b);
+  overflow:hidden;
+}
+.rb-fill {
+  display:block;
+  height:100%;
+  border-radius:100px;
+  background:var(--ac);
+}
