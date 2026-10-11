@@ -1,24 +1,25 @@
 .login {
   display:grid;
   place-items:center;
-  padding:64px 16px;
+  padding:72px 16px;
 }
 .login-card {
   width:100%;
-  max-width:400px;
+  max-width:446px;
   background:#fff;
   border:1px solid var(--b);
   border-radius:20px;
   padding:32px;
   display:flex;
   flex-direction:column;
-  gap:14px;
+  gap:16px;
 }
 .login-card h1 {
   margin:0;
-  font-size:28px;
+  font-size:32px;
   font-weight:600;
 }
 .login-card .page-sub {
-  margin-bottom:6px;
+  margin:-8px 0 4px;
+  font-size:14px;
 }

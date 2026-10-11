@@ -1,4 +1,4 @@
-/* Same colours as the customer site, plus --ac for numbers and bars. */
+/* Same colours as the customer site, plus --ac (bright green for numbers and bars, from the admin design). */
 :root {
   --g:#183e32;
   --m:#69766d;
@@ -8,6 +8,6 @@
   --ft:#e6eddf;
   --pl:#f1f4ed;
   --r:#b3382c;
-  --ac:#2e7d4f;
-  --px:80px; /* page side padding */
+  --ac:#2f8f4e;
+  --px:80px; /* page side padding, same as the customer site */
 }

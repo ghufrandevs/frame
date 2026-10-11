@@ -1,15 +1,18 @@
+/* Light green, centred cards (dashboard design). */
 .stats {
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:16px;
+  gap:24px;
 }
 .stat {
   background:var(--ft);
-  border-radius:16px;
-  padding:20px 22px;
+  border-radius:20px;
+  padding:22px 20px;
   display:flex;
   flex-direction:column;
-  gap:6px;
+  align-items:center;
+  text-align:center;
+  gap:4px;
 }
 .stat-label {
   margin:0;
@@ -17,11 +20,12 @@
   font-weight:500;
 }
 .stat-value {
-  margin:0;
-  font-size:32px;
+  margin:4px 0 0;
+  font-size:34px;
   font-weight:600;
   color:var(--ac);
   font-variant-numeric:tabular-nums;
+  line-height:1.2;
 }
 .stat-note {
   margin:0;

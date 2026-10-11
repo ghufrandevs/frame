@@ -8,8 +8,8 @@ const listeners = new Set();
 const read = () => { try { return sessionStorage.getItem(KEY) || 'en'; } catch { return 'en'; } };
 let language = read();
 
+export const languages = [{ code: 'en', label: 'English' }, { code: 'ar', label: 'العربية' }];
 export const getLanguage = () => language;
-export const otherLanguage = () => (language === 'ar' ? 'en' : 'ar');
 export const onLanguageChange = (fn) => listeners.add(fn);
 
 export function setLanguage(code) {

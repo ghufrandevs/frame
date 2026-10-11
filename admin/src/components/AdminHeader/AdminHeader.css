@@ -1,65 +1,65 @@
+/* Same sizes as the customer site header (.nav, .brand, .mn). */
 .ah {
-  height:72px;
+  height:76px;
   display:flex;
   align-items:center;
-  gap:24px;
+  justify-content:space-between;
+  gap:16px;
   padding:0 var(--px);
   border-bottom:1px solid var(--b);
   background:var(--bg);
   position:sticky;
   top:0;
-  z-index:10;
+  z-index:30;
 }
 .ah-brand {
   display:flex;
   align-items:center;
   gap:10px;
-  font-size:28px;
+  font-size:40px;
   font-weight:600;
+  line-height:1;
   color:var(--g);
   text-decoration:none;
 }
 .ah-brand svg {
-  width:28px;
-  height:28px;
+  width:35px;
+  height:35px;
 }
-.ah-badge {
-  font-size:11px;
+.ah-tag {
+  font-size:12px;
   font-weight:600;
-  background:var(--ft);
-  padding:3px 8px;
-  border-radius:100px;
+  align-self:center;
 }
 .ah-nav {
   display:flex;
-  gap:28px;
-  margin-inline:auto;
+  gap:32px;
 }
 .ah-nav a {
   font-weight:600;
   font-size:14px;
+  height:44px;
+  display:flex;
+  align-items:center;
   color:var(--g);
+  position:relative;
   text-decoration:none;
-  padding:10px 0;
-  border-bottom:2px solid transparent;
 }
-.ah-nav a.on,.ah-nav a:hover {
-  border-bottom-color:var(--g);
+.ah-nav a:after {
+  content:"";
+  position:absolute;
+  inset-inline:0;
+  bottom:6px;
+  height:2px;
+  background:var(--g);
+  transform:scaleX(0);
+  transition:transform .3s;
+}
+.ah-nav a:hover:after,.ah-nav a.on:after {
+  transform:scaleX(1);
 }
 .ah-act {
   display:flex;
+  gap:28px;
   align-items:center;
-  gap:16px;
-  margin-inline-start:auto;
-}
-.ah-nav + .ah-act {
-  margin-inline-start:0;
-}
-.ah-lang {
-  background:none;
-  border:0;
-  font-weight:600;
-  font-size:13px;
-  color:var(--g);
-  padding:8px 4px;
 }

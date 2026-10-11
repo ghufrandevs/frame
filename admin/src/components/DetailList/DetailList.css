@@ -1,0 +1,37 @@
+/* Label/value rows, like the customer site's .kv. */
+.dc .panel-title {
+  margin-bottom:16px;
+  font-size:18px;
+}
+.dc-list {
+  margin:0;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  row-gap:10px;
+  font-size:14px;
+}
+.dc-list dt {
+  color:var(--m);
+  padding-inline-end:20px;
+}
+.dc-list dd {
+  margin:0;
+  text-align:end;
+  font-variant-numeric:tabular-nums;
+  overflow-wrap:anywhere;
+}
+.dc-list dd a {
+  text-decoration:none;
+}
+.dc-list dd a:hover {
+  text-decoration:underline;
+}
+.dc-total .dc-list dt:last-of-type,
+.dc-total .dc-list dd:last-of-type {
+  font-weight:600;
+  font-size:16px;
+  color:var(--g);
+  border-top:1px solid var(--b);
+  padding-top:12px;
+  margin-top:4px;
+}

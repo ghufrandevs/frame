@@ -6,18 +6,28 @@ body {
   background:var(--bg);
   color:var(--g);
   font:400 14px/1.5 Inter,"Noto Sans Arabic",system-ui,sans-serif;
+  overflow-x:hidden;
 }
 [dir=rtl] body {
   font-family:"Noto Sans Arabic",Inter,sans-serif;
 }
+a {
+  color:var(--g);
+}
 button {
   font:inherit;
+  color:inherit;
   cursor:pointer;
 }
 :focus-visible {
   outline:3px solid #7aa88e;
   outline-offset:2px;
 }
+main {
+  animation:pg .5s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes pg{from{opacity:0;transform:translateY(14px)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 #header, #footer {
   display:contents;
 }

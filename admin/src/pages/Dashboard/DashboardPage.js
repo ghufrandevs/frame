@@ -3,7 +3,7 @@ import { getDashboard } from '../../services/dashboardService.js';
 import { money, percent, monthLabel } from '../../utils/format.js';
 import { StatCard } from '../../components/StatCard/StatCard.js';
 import { RevenueBars } from '../../components/RevenueBars/RevenueBars.js';
-import { BookingTable } from '../../components/BookingTable/BookingTable.js';
+import { BookingTable, mountBookingTable } from '../../components/BookingTable/BookingTable.js';
 
 // Everything on this page comes from GET /admin/dashboard (one request).
 export const DashboardPage = {
@@ -19,14 +19,24 @@ export const DashboardPage = {
         ${StatCard({ label: t('dashboard.bookings'), value: d.bookingsCount, note: t('dashboard.bookingsNote') })}
         ${StatCard({ label: t('dashboard.occupancy'), value: percent(d.occupancyNext7Days), note: t('dashboard.occupancyNote') })}
       </div>
-      <section class="panel">
-        <h2 class="panel-title">${t('dashboard.revenueByStudio')} <span class="panel-hint">${t('dashboard.thisMonth')}</span></h2>
+      <section class="panel panel-soft">
+        <div class="panel-head">
+          <h2 class="panel-title">${t('dashboard.revenueByStudio')}</h2>
+          <span class="panel-hint">${t('dashboard.thisMonth')}</span>
+        </div>
         ${RevenueBars(d.revenueByStudio)}
       </section>
-      <section class="panel">
-        <h2 class="panel-title">${t('dashboard.today')}</h2>
-        ${BookingTable(d.today, t('dashboard.noBookingsToday'))}
+      <section class="panel panel-list" id="todayBookings">
+        <div class="panel-head">
+          <h2 class="panel-title">${t('dashboard.today')}</h2>
+          <a class="btn btn-light" href="#/bookings">${t('dashboard.allBookings')}</a>
+        </div>
+        ${BookingTable(d.today, { emptyText: t('dashboard.noBookingsToday') })}
       </section>
     </section>`;
+  },
+
+  mount(root) {
+    mountBookingTable(root.querySelector('#todayBookings'));
   },
 };
