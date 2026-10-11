@@ -118,6 +118,26 @@ export default {
     bookingNumber: "Booking number",
     paidWith: "Paid with"
   },
+  auth: {
+    loginTitle: "Log In",
+    signupTitle: "Sign Up",
+    welcome: "Welcome to FRAME",
+    fullName: "Full name",
+    email: "Email address",
+    phone: "Phone number",
+    password: "Password",
+    namePlaceholder: "Your full name",
+    emailPlaceholder: "name@gmail.com",
+    phonePlaceholder: "9XXX XXXX",
+    loginButton: "Log In",
+    signupButton: "Sign Up",
+    noAccount: "Don't have an account?",
+    signUpLink: "Sign Up",
+    haveAccount: "Already have an account?",
+    logInLink: "Log in",
+    fillAll: "Enter your email and password.",
+    cameraAlt: "Two cameras taking turns jumping"
+  },
   profile: {
     title: "My profile",
     edit: "Edit Profile",

@@ -118,6 +118,26 @@ export default {
     bookingNumber: "رقم الحجز",
     paidWith: "طريقة الدفع"
   },
+  auth: {
+    loginTitle: "تسجيل الدخول",
+    signupTitle: "إنشاء حساب",
+    welcome: "أهلاً بك في FRAME",
+    fullName: "الاسم الكامل",
+    email: "البريد الإلكتروني",
+    phone: "رقم الهاتف",
+    password: "كلمة المرور",
+    namePlaceholder: "اسمك الكامل",
+    emailPlaceholder: "name@gmail.com",
+    phonePlaceholder: "9XXX XXXX",
+    loginButton: "دخول",
+    signupButton: "إنشاء حساب",
+    noAccount: "ليس لديك حساب؟",
+    signUpLink: "أنشئ حساباً",
+    haveAccount: "لديك حساب؟",
+    logInLink: "سجّل الدخول",
+    fillAll: "أدخل البريد الإلكتروني وكلمة المرور.",
+    cameraAlt: "كاميرتان تقفزان بالتناوب"
+  },
   profile: {
     title: "ملفي الشخصي",
     edit: "تعديل الملف",

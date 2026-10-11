@@ -1,0 +1,50 @@
+/* Shared by the login and sign-up pages: form card on one side, camera panel on the other. */
+.auth {
+  align-items:stretch;
+}
+.auth-card {
+  background:#fff;
+  border:1px solid var(--b);
+  border-radius:20px;
+  padding:28px;
+  width:446px;
+  flex:none;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.auth-card .pill {
+  width:75%;
+  align-self:center;
+  margin-top:12px;
+}
+.auth-alt {
+  font-size:12px;
+  color:var(--m);
+  text-align:center;
+  margin:12px 0 0;
+}
+.auth-alt a {
+  color:var(--g);
+  font-weight:600;
+}
+.auth-err {
+  font-size:12px;
+  color:var(--r);
+  min-height:16px;
+  margin:4px 0 0;
+}
+.auth-art {
+  flex:1;
+  min-width:0;
+  background:var(--sh);
+  border-radius:20px;
+  display:grid;
+  place-items:center;
+  padding:24px;
+}
+@media (max-width:1100px) {
+  .auth-card {
+    width:100%;
+  }
+}
