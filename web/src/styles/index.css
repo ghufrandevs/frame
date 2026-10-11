@@ -21,4 +21,6 @@
 @import './../components/DetailList/DetailList.css';
 @import './../pages/Location/Location.css';
 @import './../components/Toast/Toast.css';
+@import './../components/CameraJump/CameraJump.css';
+@import './../pages/Auth/Auth.css';
 @import './responsive.css';

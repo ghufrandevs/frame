@@ -5,6 +5,8 @@ import { PaymentPage } from './pages/Payment/PaymentPage.js';
 import { BookingSuccessPage } from './pages/BookingSuccess/BookingSuccessPage.js';
 import { ProfilePage } from './pages/Profile/ProfilePage.js';
 import { LocationPage } from './pages/Location/LocationPage.js';
+import { LoginPage } from './pages/Login/LoginPage.js';
+import { RegisterPage } from './pages/Register/RegisterPage.js';
 
 export const routes = [
   { path: '/', navId: 'home', page: HomePage },
@@ -14,4 +16,6 @@ export const routes = [
   { path: '/booking-success', page: BookingSuccessPage, auth: true },
   { path: '/profile', page: ProfilePage, auth: true },
   { path: '/location', navId: 'location', page: LocationPage },
+  { path: '/login', page: LoginPage },
+  { path: '/register', page: RegisterPage },
 ];
