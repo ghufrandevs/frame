@@ -12,7 +12,9 @@
 @import './../components/BookingTable/BookingTable.css';
 @import './../components/AdminFooter/AdminFooter.css';
 @import './../components/DetailList/DetailList.css';
+@import './../components/StudioCard/StudioCard.css';
 @import './../pages/Login/Login.css';
 @import './../pages/Bookings/Bookings.css';
 @import './../pages/BookingDetails/BookingDetails.css';
+@import './../pages/StudioForm/StudioForm.css';
 @import './responsive.css';

@@ -21,5 +21,7 @@
   .filters .field { min-width:0; flex:1 1 100%; }
   .seg { width:100%; }
   .seg .btn { flex:1; }
-  .details-head .btn { width:100%; }
+  .details-head .btn, .page-head-row .btn { width:100%; }
+  .studio-form, .studio-form-row { grid-template-columns:1fr; }
+  .studio-form-actions .btn { flex:1; }
 }

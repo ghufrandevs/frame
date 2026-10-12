@@ -5,13 +5,14 @@ import { getLanguage } from '../i18n/i18n.js';
 
 const TOKEN_KEY = 'frame_admin_token';
 
-// Server error body: { status, code, message, errors, traceId } -> ApiError(status, code).
+// Server error body: { status, code, message, errors, traceId } -> ApiError(status, code, fieldErrors).
 export class ApiError extends Error {
-  constructor(status, code) {
+  constructor(status, code, fieldErrors = {}) {
     super(code);
     this.name = 'ApiError';
     this.status = status; // 0 = server unreachable
     this.code = code;
+    this.fieldErrors = fieldErrors; // 400 VALIDATION_ERROR: { pricePerHour: ['PRICE_INVALID'] }
   }
 }
 
@@ -36,7 +37,7 @@ async function request(path, { method = 'GET', body } = {}) {
   if (res.ok) return data;
 
   if (res.status === 401) setToken(null); // expired or invalid token: log in again
-  throw new ApiError(res.status, data?.code ?? 'UNKNOWN_ERROR');
+  throw new ApiError(res.status, data?.code ?? 'UNKNOWN_ERROR', data?.errors ?? {});
 }
 
 export const api = {

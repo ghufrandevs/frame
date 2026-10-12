@@ -24,11 +24,12 @@ export function navigate(path, { replace = false } = {}) {
   location.hash = '#' + path;
 }
 
+// ok = false when the page could not load: the error message is shown and the page's mount is skipped.
 async function render(page, params) {
   try {
-    return await page.render(params);
+    return { html: await page.render(params), ok: true };
   } catch (error) {
-    return onError(error);
+    return { html: onError(error), ok: false };
   }
 }
 
@@ -45,13 +46,13 @@ async function handle(force = false) {
   if (!force && current?.route === route && page.onParams) { await page.onParams(params); onRender(route, params); return; }
   current?.route.page.unmount?.();
   current = null;
-  const html = await render(page, params);
+  const { html, ok } = await render(page, params);
   if (ticket !== seq) return; // a newer navigation won
   if (html?.redirect) return navigate(html.redirect, { replace: true });
   outlet.innerHTML = `<main>${html}</main>`;
   scrollTo(0, 0);
   current = { route, params };
-  page.mount?.(outlet, params);
+  if (ok) page.mount?.(outlet, params);
   onRender(route, params);
 }
 

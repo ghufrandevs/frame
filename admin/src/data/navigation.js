@@ -1,5 +1,6 @@
-// Header links. Add a page here when it is ready (Studios).
+// Header links, in order.
 export const navItems = [
   { id: 'dashboard', path: '/', labelKey: 'nav.dashboard' },
   { id: 'bookings', path: '/bookings', labelKey: 'nav.bookings' },
+  { id: 'studios', path: '/studios', labelKey: 'nav.studios' },
 ];
