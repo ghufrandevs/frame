@@ -9,7 +9,11 @@ namespace Frame.Application.Common.Abstractions.Persistence;
 /// </summary>
 public interface IUnitOfWork
 {
-    /// <summary>Writes every pending change in a single database transaction.</summary>
+    /// <summary>
+    /// Writes every pending change in a single database transaction.
+    /// Throws TransactionConflictException when a row was changed by someone else
+    /// since it was read (e.g. two admins cancelling the same booking).
+    /// </summary>
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     /// <summary>

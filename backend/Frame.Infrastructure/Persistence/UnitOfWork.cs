@@ -24,8 +24,18 @@ internal sealed class UnitOfWork : IUnitOfWork
         _db = db;
     }
 
-    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        => _db.SaveChangesAsync(cancellationToken);
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            return await _db.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            // A concurrency token did not match: someone changed the same row first.
+            throw new TransactionConflictException(ex);
+        }
+    }
 
     public async Task<T> ExecuteInTransactionAsync<T>(
         Func<CancellationToken, Task<T>> operation,
@@ -50,7 +60,7 @@ internal sealed class UnitOfWork : IUnitOfWork
             _db.ChangeTracker.Clear();
 
             // Lost a race with a concurrent transaction: tell the caller in Application terms.
-            if (IsDeadlock(ex))
+            if (IsDeadlock(ex) || ex is DbUpdateConcurrencyException)
                 throw new TransactionConflictException(ex);
 
             throw;
