@@ -62,10 +62,14 @@ internal sealed class BookingConfiguration : IEntityTypeConfiguration<Booking>
         builder.Property(b => b.PaidAt).IsRequired();
 
         // ===== Status =====
+        // Concurrency token: an update is saved only if Status is still what was read
+        // (UPDATE ... WHERE Status = 'Confirmed'). Two admins cancelling at the same moment:
+        // one save wins, the other fails, so the money is refunded once. No column change.
         builder.Property(b => b.Status)
                .HasConversion<string>()
                .HasMaxLength(20)
-               .IsRequired();
+               .IsRequired()
+               .IsConcurrencyToken();
 
         builder.Property(b => b.CancelledAt);
         builder.Property(b => b.RefundAmount);

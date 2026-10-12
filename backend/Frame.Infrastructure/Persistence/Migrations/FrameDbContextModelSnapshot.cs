@@ -95,6 +95,7 @@ namespace Frame.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
+                        .IsConcurrencyToken()
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");

@@ -57,7 +57,8 @@ public sealed class Booking : BaseEntity
     // ===== Calculated, not stored =====
     public int Hours => EndHour - StartHour;
     public DateTime StartsAt => BookingDate.ToDateTime(new TimeOnly(StartHour, 0));
-    public DateTime EndsAt => BookingDate.ToDateTime(new TimeOnly(EndHour, 0));
+    // AddHours, not new TimeOnly(EndHour, 0): a studio may close at 24:00, and TimeOnly only goes up to 23:59.
+    public DateTime EndsAt => BookingDate.ToDateTime(TimeOnly.MinValue).AddHours(EndHour);
 
     private Booking() { }
 
@@ -137,8 +138,8 @@ public sealed class Booking : BaseEntity
 
     /// <summary>
     /// Admin cancellation with a full refund. Only before the booking starts.
-    /// Call this BEFORE refunding at the gateway, so a refused cancellation
-    /// never sends money back.
+    /// Call this and SAVE it before refunding at the gateway: a refused cancellation
+    /// never sends money back, and two admins can never refund the same booking.
     /// </summary>
     public void Cancel(DateTime nowMuscat, DateTime nowUtc)
     {
@@ -151,5 +152,16 @@ public sealed class Booking : BaseEntity
         Status = BookingStatus.Cancelled;
         CancelledAt = nowUtc;
         RefundAmount = TotalAmount;
+    }
+
+    /// <summary>
+    /// Undoes Cancel when the refund at the gateway failed, so the booking is
+    /// Confirmed again and the customer keeps the session they paid for.
+    /// </summary>
+    public void RevertCancellation()
+    {
+        Status = BookingStatus.Confirmed;
+        CancelledAt = null;
+        RefundAmount = null;
     }
 }
