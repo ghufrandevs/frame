@@ -1,0 +1,109 @@
+/* Same sizes as the customer site's studio card (.grid, .card, .shw, .det in StudioCard.css there). */
+.sc-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:24px;
+}
+.sc {
+  background:#fff;
+  border:1px solid var(--b);
+  border-radius:20px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  transition:transform .35s,box-shadow .35s;
+}
+.sc:hover {
+  transform:translateY(-6px);
+  box-shadow:0 20px 40px #183e3220;
+}
+.sc-media {
+  background:var(--sh);
+  height:244px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+}
+.sc-media img {
+  width:278px;
+  max-width:92%;
+  height:230px;
+  object-fit:contain;
+  transition:transform .6s cubic-bezier(.2,.8,.2,1);
+}
+.sc:hover .sc-media img {
+  transform:scale(1.07) translateY(-4px);
+}
+.sc-placeholder svg {
+  width:56px;
+  height:56px;
+  color:var(--b);
+}
+.sc-body {
+  padding:22px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  flex:1;
+}
+.sc-name {
+  font-size:21px;
+  font-weight:600;
+  margin:7px 0;
+}
+.sc-desc {
+  margin:0;
+  font-size:13px;
+  line-height:1.55;
+  color:var(--m);
+  min-height:41px;
+}
+.sc-facts {
+  margin:0;
+  margin-top:auto;
+  padding-top:14px;
+  border-top:1px solid var(--b);
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.sc-facts div {
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:12px;
+}
+.sc-facts dt {
+  font-size:12px;
+  color:var(--m);
+}
+.sc-facts dd {
+  margin:0;
+  font-weight:600;
+  font-size:14px;
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.sc-facts dd span {
+  font-size:11px;
+  font-weight:500;
+  color:var(--m);
+}
+.sc-actions {
+  display:flex;
+  gap:8px;
+}
+.sc-actions .btn {
+  flex:1;
+}
+.sc-paused .sc-media img {
+  filter:grayscale(1);
+  opacity:.55;
+}
+.sc-paused .sc-name, .sc-paused .sc-facts {
+  opacity:.6;
+}
+.badge-Paused {
+  background:#fdf0d8;
+  color:#7a4a06;
+}
